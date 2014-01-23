@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# debug the ts system
+#
+
+TS_ROOT="TSCRIPTROOTGOESHERE"
+
+jdb -classpath "$TS_ROOT/build/packages:$TS_ROOT/build/lib/antlr.jar" ts.Main $@
+
