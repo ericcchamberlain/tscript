@@ -1,7 +1,9 @@
 # Ignored Paths #
 ################
 tscript/build
-
+tscript/.classpath
+tscript/.project
+tscript/*.html
 
 # OS generated files #
 ######################

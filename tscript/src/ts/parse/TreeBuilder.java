@@ -47,8 +47,22 @@ public class TreeBuilder
     final Expression left, final Expression right)
   {
     Message.log("TreeBuilder: Binop " + op.toString());
-
     return new BinaryOperator(loc, op, left, right);
+  }
+
+    /** Build a unary operator.
+   *
+   *  @param  loc   location in source code (file, line, column)
+   *  @param  op    the unary operator
+   *  @param  child the child subtree
+      @see Binop
+   */
+  public static Expression buildUnaryOperator(final Location loc,
+    final Unary op,
+    final Expression child)
+  {
+    Message.log("TreeBuilder: Unary " + op.toString());
+    return new UnaryOperator(loc, op, child);
   }
 
   /** Build a identifier expression.

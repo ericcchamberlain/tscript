@@ -112,5 +112,12 @@ public final class TreeDump extends TreeVisitorBase<Object>
     return null;
   }
 
+  public Object visit(final UnaryOperator unaryOperator)
+  {
+    indent();
+    writer.println("Var " + unaryOperator.getOp());
+    return null;
+  }
+
 }
 

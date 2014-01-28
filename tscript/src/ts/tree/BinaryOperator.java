@@ -48,5 +48,6 @@ public class BinaryOperator extends Expression
   {
     return visitor.visit(this);
   }
+
 }
 

@@ -107,11 +107,19 @@ additiveExpression
         $l.lval, $r.lval); }
   ;
 
+unaryExpression
+  returns [ Expression lval ]
+  : LOGICAL_NOT u=unaryExpression
+    { $lval = buildUnaryOperator(loc($start), Unary.LOGICAL_NOT, $u.lval); }
+  | p=primaryExpression
+    { $lval = $p.lval; }
+  ;
+
 multiplicativeExpression
   returns [ Expression lval ]
-  : p=primaryExpression
+  : p=unaryExpression
     { $lval = $p.lval; }
-  | l=multiplicativeExpression ASTERISK r=primaryExpression
+  | l=multiplicativeExpression ASTERISK r=unaryExpression
     { $lval = buildBinaryOperator(loc($start), Binop.MULTIPLY,
       $l.lval, $r.lval); }
   ;
@@ -151,6 +159,7 @@ SEMICOLON : [;];
 EQUAL : [=];
 PLUS : [+];
 ASTERISK : [*];
+LOGICAL_NOT : [!];
 
 // keywords start here
 PRINT : 'print';

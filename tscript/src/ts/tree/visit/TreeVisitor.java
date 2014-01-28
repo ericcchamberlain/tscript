@@ -20,6 +20,8 @@ public interface TreeVisitor<T>
 
   T visit(PrintStatement printStatement);
 
+  T visit(UnaryOperator unaryOperator);
+
   T visit(VarStatement varStatement);
 }
 
