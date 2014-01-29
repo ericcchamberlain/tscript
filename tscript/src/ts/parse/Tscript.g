@@ -160,6 +160,11 @@ EQUAL : [=];
 PLUS : [+];
 ASTERISK : [*];
 LOGICAL_NOT : [!];
+LESS : [<];
+GREATER : [>];
+LESS_OR_EQUAL : [<][=];
+GREATER_OR_EQUAL : [>][=];
+
 
 // keywords start here
 PRINT : 'print';

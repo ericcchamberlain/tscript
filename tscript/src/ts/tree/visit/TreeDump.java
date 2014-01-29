@@ -116,6 +116,9 @@ public final class TreeDump extends TreeVisitorBase<Object>
   {
     indent();
     writer.println("Var " + unaryOperator.getOp());
+    indentation += increment;
+    visitNode(unaryOperator.getChild());
+    indentation -= increment;
     return null;
   }
 
