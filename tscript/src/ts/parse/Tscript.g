@@ -130,6 +130,8 @@ primaryExpression
     { $lval = buildIdentifier(loc($start), $IDENTIFIER.text); }
   | NUMERIC_LITERAL
     { $lval = buildNumericLiteral(loc($start), $NUMERIC_LITERAL.text); }
+  | BOOLEAN_LITERAL
+    { $lval = buildBooleanLiteral(loc($start), $BOOLEAN_LITERAL.text); } // not sure about this 
   | LPAREN e=expression RPAREN
     { $lval = $e.lval; }
   ;
@@ -152,6 +154,7 @@ fragment LineTerminator : '\r' '\n' | '\r' | '\n';
 //   keywords must appear before IDENTIFIER
 
 NUMERIC_LITERAL : DIGIT+;
+BOOLEAN_LITERAL : 'true' | 'false'; 
 
 LPAREN : [(];
 RPAREN : [)];
@@ -164,7 +167,6 @@ LESS : [<];
 GREATER : [>];
 LESS_OR_EQUAL : [<][=];
 GREATER_OR_EQUAL : [>][=];
-
 
 // keywords start here
 PRINT : 'print';

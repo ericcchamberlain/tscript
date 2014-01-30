@@ -4,6 +4,10 @@ tscript/build
 tscript/.classpath
 tscript/.project
 tscript/*.html
+RemoteSystemsTempFiles
+tscript/UML
+
+
 
 # OS generated files #
 ######################

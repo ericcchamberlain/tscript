@@ -22,11 +22,14 @@ public class TscriptParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		NUMERIC_LITERAL=1, LPAREN=2, RPAREN=3, SEMICOLON=4, EQUAL=5, PLUS=6, ASTERISK=7, 
-		LOGICAL_NOT=8, PRINT=9, VAR=10, IDENTIFIER=11, WhiteSpace=12;
+		NUMERIC_LITERAL=1, BOOLEAN_LITERAL=2, LPAREN=3, RPAREN=4, SEMICOLON=5, 
+		EQUAL=6, PLUS=7, ASTERISK=8, LOGICAL_NOT=9, LESS=10, GREATER=11, LESS_OR_EQUAL=12, 
+		GREATER_OR_EQUAL=13, PRINT=14, VAR=15, IDENTIFIER=16, WhiteSpace=17;
 	public static final String[] tokenNames = {
-		"<INVALID>", "NUMERIC_LITERAL", "LPAREN", "RPAREN", "SEMICOLON", "EQUAL", 
-		"PLUS", "ASTERISK", "LOGICAL_NOT", "'print'", "'var'", "IDENTIFIER", "WhiteSpace"
+		"<INVALID>", "NUMERIC_LITERAL", "BOOLEAN_LITERAL", "LPAREN", "RPAREN", 
+		"SEMICOLON", "EQUAL", "PLUS", "ASTERISK", "LOGICAL_NOT", "LESS", "GREATER", 
+		"LESS_OR_EQUAL", "GREATER_OR_EQUAL", "'print'", "'var'", "IDENTIFIER", 
+		"WhiteSpace"
 	};
 	public static final int
 		RULE_program = 0, RULE_statementList = 1, RULE_statement = 2, RULE_varStatement = 3, 
@@ -212,6 +215,7 @@ public class TscriptParser extends Parser {
 				}
 				break;
 			case NUMERIC_LITERAL:
+			case BOOLEAN_LITERAL:
 			case LPAREN:
 			case LOGICAL_NOT:
 			case IDENTIFIER:
@@ -582,6 +586,7 @@ public class TscriptParser extends Parser {
 				}
 				break;
 			case NUMERIC_LITERAL:
+			case BOOLEAN_LITERAL:
 			case LPAREN:
 			case IDENTIFIER:
 				enterOuterAlt(_localctx, 2);
@@ -684,7 +689,9 @@ public class TscriptParser extends Parser {
 		public Expression lval;
 		public Token IDENTIFIER;
 		public Token NUMERIC_LITERAL;
+		public Token BOOLEAN_LITERAL;
 		public ExpressionContext e;
+		public TerminalNode BOOLEAN_LITERAL() { return getToken(TscriptParser.BOOLEAN_LITERAL, 0); }
 		public TerminalNode NUMERIC_LITERAL() { return getToken(TscriptParser.NUMERIC_LITERAL, 0); }
 		public TerminalNode IDENTIFIER() { return getToken(TscriptParser.IDENTIFIER, 0); }
 		public TerminalNode RPAREN() { return getToken(TscriptParser.RPAREN, 0); }
@@ -702,7 +709,7 @@ public class TscriptParser extends Parser {
 		PrimaryExpressionContext _localctx = new PrimaryExpressionContext(_ctx, getState());
 		enterRule(_localctx, 24, RULE_primaryExpression);
 		try {
-			setState(129);
+			setState(131);
 			switch (_input.LA(1)) {
 			case IDENTIFIER:
 				enterOuterAlt(_localctx, 1);
@@ -718,12 +725,19 @@ public class TscriptParser extends Parser {
 				 ((PrimaryExpressionContext)_localctx).lval =  buildNumericLiteral(loc(_localctx.start), (((PrimaryExpressionContext)_localctx).NUMERIC_LITERAL!=null?((PrimaryExpressionContext)_localctx).NUMERIC_LITERAL.getText():null)); 
 				}
 				break;
-			case LPAREN:
+			case BOOLEAN_LITERAL:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(124); match(LPAREN);
-				setState(125); ((PrimaryExpressionContext)_localctx).e = expression();
-				setState(126); match(RPAREN);
+				setState(124); ((PrimaryExpressionContext)_localctx).BOOLEAN_LITERAL = match(BOOLEAN_LITERAL);
+				 ((PrimaryExpressionContext)_localctx).lval =  buildBooleanLiteral(loc(_localctx.start), (((PrimaryExpressionContext)_localctx).BOOLEAN_LITERAL!=null?((PrimaryExpressionContext)_localctx).BOOLEAN_LITERAL.getText():null)); 
+				}
+				break;
+			case LPAREN:
+				enterOuterAlt(_localctx, 4);
+				{
+				setState(126); match(LPAREN);
+				setState(127); ((PrimaryExpressionContext)_localctx).e = expression();
+				setState(128); match(RPAREN);
 				 ((PrimaryExpressionContext)_localctx).lval =  ((PrimaryExpressionContext)_localctx).e.lval; 
 				}
 				break;
@@ -772,7 +786,7 @@ public class TscriptParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\uacf5\uee8c\u4f5d\u8b0d\u4a45\u78bd\u1b2f\u3378\3\16\u0086\4\2\t\2"+
+		"\3\uacf5\uee8c\u4f5d\u8b0d\u4a45\u78bd\u1b2f\u3378\3\23\u0088\4\2\t\2"+
 		"\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
 		"\t\13\4\f\t\f\4\r\t\r\4\16\t\16\3\2\3\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3"+
 		"\3\3\3\7\3(\n\3\f\3\16\3+\13\3\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\5\4"+
@@ -780,30 +794,31 @@ public class TscriptParser extends Parser {
 		"\b\3\b\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\5\tQ\n\t\3\n\3\n\3\n\3\13\3\13"+
 		"\3\13\3\13\3\13\3\13\3\13\3\13\3\13\7\13_\n\13\f\13\16\13b\13\13\3\f\3"+
 		"\f\3\f\3\f\3\f\3\f\3\f\5\fk\n\f\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\7"+
-		"\rv\n\r\f\r\16\ry\13\r\3\16\3\16\3\16\3\16\3\16\3\16\3\16\3\16\3\16\5"+
-		"\16\u0084\n\16\3\16\2\17\2\4\6\b\n\f\16\20\22\24\26\30\32\2\2\u0081\2"+
-		"\34\3\2\2\2\4 \3\2\2\2\6\65\3\2\2\2\b\67\3\2\2\2\n<\3\2\2\2\f@\3\2\2\2"+
-		"\16E\3\2\2\2\20P\3\2\2\2\22R\3\2\2\2\24U\3\2\2\2\26j\3\2\2\2\30l\3\2\2"+
-		"\2\32\u0083\3\2\2\2\34\35\5\4\3\2\35\36\7\2\2\3\36\37\b\2\1\2\37\3\3\2"+
-		"\2\2 !\b\3\1\2!\"\b\3\1\2\")\3\2\2\2#$\6\3\2\3$%\5\6\4\2%&\b\3\1\2&(\3"+
-		"\2\2\2\'#\3\2\2\2(+\3\2\2\2)\'\3\2\2\2)*\3\2\2\2*\5\3\2\2\2+)\3\2\2\2"+
-		",-\5\b\5\2-.\b\4\1\2.\66\3\2\2\2/\60\5\n\6\2\60\61\b\4\1\2\61\66\3\2\2"+
-		"\2\62\63\5\f\7\2\63\64\b\4\1\2\64\66\3\2\2\2\65,\3\2\2\2\65/\3\2\2\2\65"+
-		"\62\3\2\2\2\66\7\3\2\2\2\678\7\f\2\289\7\r\2\29:\7\6\2\2:;\b\5\1\2;\t"+
-		"\3\2\2\2<=\5\16\b\2=>\7\6\2\2>?\b\6\1\2?\13\3\2\2\2@A\7\13\2\2AB\5\16"+
-		"\b\2BC\7\6\2\2CD\b\7\1\2D\r\3\2\2\2EF\5\20\t\2FG\b\b\1\2G\17\3\2\2\2H"+
-		"I\5\24\13\2IJ\b\t\1\2JQ\3\2\2\2KL\5\22\n\2LM\7\7\2\2MN\5\20\t\2NO\b\t"+
-		"\1\2OQ\3\2\2\2PH\3\2\2\2PK\3\2\2\2Q\21\3\2\2\2RS\5\32\16\2ST\b\n\1\2T"+
-		"\23\3\2\2\2UV\b\13\1\2VW\5\30\r\2WX\b\13\1\2X`\3\2\2\2YZ\6\13\3\3Z[\7"+
-		"\b\2\2[\\\5\30\r\2\\]\b\13\1\2]_\3\2\2\2^Y\3\2\2\2_b\3\2\2\2`^\3\2\2\2"+
-		"`a\3\2\2\2a\25\3\2\2\2b`\3\2\2\2cd\7\n\2\2de\5\26\f\2ef\b\f\1\2fk\3\2"+
-		"\2\2gh\5\32\16\2hi\b\f\1\2ik\3\2\2\2jc\3\2\2\2jg\3\2\2\2k\27\3\2\2\2l"+
-		"m\b\r\1\2mn\5\26\f\2no\b\r\1\2ow\3\2\2\2pq\6\r\4\3qr\7\t\2\2rs\5\26\f"+
-		"\2st\b\r\1\2tv\3\2\2\2up\3\2\2\2vy\3\2\2\2wu\3\2\2\2wx\3\2\2\2x\31\3\2"+
-		"\2\2yw\3\2\2\2z{\7\r\2\2{\u0084\b\16\1\2|}\7\3\2\2}\u0084\b\16\1\2~\177"+
-		"\7\4\2\2\177\u0080\5\16\b\2\u0080\u0081\7\5\2\2\u0081\u0082\b\16\1\2\u0082"+
-		"\u0084\3\2\2\2\u0083z\3\2\2\2\u0083|\3\2\2\2\u0083~\3\2\2\2\u0084\33\3"+
-		"\2\2\2\t)\65P`jw\u0083";
+		"\rv\n\r\f\r\16\ry\13\r\3\16\3\16\3\16\3\16\3\16\3\16\3\16\3\16\3\16\3"+
+		"\16\3\16\5\16\u0086\n\16\3\16\2\17\2\4\6\b\n\f\16\20\22\24\26\30\32\2"+
+		"\2\u0084\2\34\3\2\2\2\4 \3\2\2\2\6\65\3\2\2\2\b\67\3\2\2\2\n<\3\2\2\2"+
+		"\f@\3\2\2\2\16E\3\2\2\2\20P\3\2\2\2\22R\3\2\2\2\24U\3\2\2\2\26j\3\2\2"+
+		"\2\30l\3\2\2\2\32\u0085\3\2\2\2\34\35\5\4\3\2\35\36\7\2\2\3\36\37\b\2"+
+		"\1\2\37\3\3\2\2\2 !\b\3\1\2!\"\b\3\1\2\")\3\2\2\2#$\6\3\2\3$%\5\6\4\2"+
+		"%&\b\3\1\2&(\3\2\2\2\'#\3\2\2\2(+\3\2\2\2)\'\3\2\2\2)*\3\2\2\2*\5\3\2"+
+		"\2\2+)\3\2\2\2,-\5\b\5\2-.\b\4\1\2.\66\3\2\2\2/\60\5\n\6\2\60\61\b\4\1"+
+		"\2\61\66\3\2\2\2\62\63\5\f\7\2\63\64\b\4\1\2\64\66\3\2\2\2\65,\3\2\2\2"+
+		"\65/\3\2\2\2\65\62\3\2\2\2\66\7\3\2\2\2\678\7\21\2\289\7\22\2\29:\7\7"+
+		"\2\2:;\b\5\1\2;\t\3\2\2\2<=\5\16\b\2=>\7\7\2\2>?\b\6\1\2?\13\3\2\2\2@"+
+		"A\7\20\2\2AB\5\16\b\2BC\7\7\2\2CD\b\7\1\2D\r\3\2\2\2EF\5\20\t\2FG\b\b"+
+		"\1\2G\17\3\2\2\2HI\5\24\13\2IJ\b\t\1\2JQ\3\2\2\2KL\5\22\n\2LM\7\b\2\2"+
+		"MN\5\20\t\2NO\b\t\1\2OQ\3\2\2\2PH\3\2\2\2PK\3\2\2\2Q\21\3\2\2\2RS\5\32"+
+		"\16\2ST\b\n\1\2T\23\3\2\2\2UV\b\13\1\2VW\5\30\r\2WX\b\13\1\2X`\3\2\2\2"+
+		"YZ\6\13\3\3Z[\7\t\2\2[\\\5\30\r\2\\]\b\13\1\2]_\3\2\2\2^Y\3\2\2\2_b\3"+
+		"\2\2\2`^\3\2\2\2`a\3\2\2\2a\25\3\2\2\2b`\3\2\2\2cd\7\13\2\2de\5\26\f\2"+
+		"ef\b\f\1\2fk\3\2\2\2gh\5\32\16\2hi\b\f\1\2ik\3\2\2\2jc\3\2\2\2jg\3\2\2"+
+		"\2k\27\3\2\2\2lm\b\r\1\2mn\5\26\f\2no\b\r\1\2ow\3\2\2\2pq\6\r\4\3qr\7"+
+		"\n\2\2rs\5\26\f\2st\b\r\1\2tv\3\2\2\2up\3\2\2\2vy\3\2\2\2wu\3\2\2\2wx"+
+		"\3\2\2\2x\31\3\2\2\2yw\3\2\2\2z{\7\22\2\2{\u0086\b\16\1\2|}\7\3\2\2}\u0086"+
+		"\b\16\1\2~\177\7\4\2\2\177\u0086\b\16\1\2\u0080\u0081\7\5\2\2\u0081\u0082"+
+		"\5\16\b\2\u0082\u0083\7\6\2\2\u0083\u0084\b\16\1\2\u0084\u0086\3\2\2\2"+
+		"\u0085z\3\2\2\2\u0085|\3\2\2\2\u0085~\3\2\2\2\u0085\u0080\3\2\2\2\u0086"+
+		"\33\3\2\2\2\t)\65P`jw\u0085";
 	public static final ATN _ATN =
 		ATNSimulator.deserialize(_serializedATN.toCharArray());
 	static {

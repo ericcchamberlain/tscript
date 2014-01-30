@@ -77,6 +77,30 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
     return left;
   }
 
+  public TSCompletion visit(final UnaryOperator unaryOperator)
+  {
+    TSCompletion child = visitNode(unaryOperator.getChild());
+    if (!child.isNormal())
+    {
+      return child;
+    } 
+    Message.setLocation(unaryOperator.getLoc());
+    if (unaryOperator.getOp() == Unary.LOGICAL_NOT)
+    {
+      //TODO: left.setValue(left.getValue().add(right.getValue()));
+    } 
+    else if (unaryOperator.getOp() == Unary.UNARY_MINUS)
+    {
+      //TODO: Implement Unary Minus 
+    }
+    else
+    {
+      assert false : "unexpected binary operator";
+    }
+    return child;
+  }
+
+
   public TSCompletion visit(final ExpressionStatement expressionStatement)
   {
     TSCompletion completion = visitNode(expressionStatement.getExp());
