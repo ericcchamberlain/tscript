@@ -100,8 +100,8 @@ public class TreeBuilder
     return new NumericLiteral(loc, d);
   }
 
-  /** Build a numeric literal expression. Converts the String for
-   *  the value to a double.
+  /** Build a boolean literal expression. Converts the String for
+   *  the value to a boolean.
    *
    *  @param  loc   location in source code (file, line, column)
    *  @param  value value of the literal as a String
@@ -109,7 +109,7 @@ public class TreeBuilder
   public static Expression buildBooleanLiteral(final Location loc,
     final String value)
   {
-    boolean b = false;
+    Boolean b = false;
 
     try
     {
