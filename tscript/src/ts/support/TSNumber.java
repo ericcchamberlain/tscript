@@ -48,6 +48,19 @@ public final class TSNumber extends TSPrimitive
   {
     return this;
   }
+  
+  /** Convert to a Boolean 
+   * (<a href="http://www.ecma-international.org/ecma-262/5.1/#sec-9.2">ELS
+   * 9.2</a>)
+   */
+  public TSBoolean toBoolean()
+  {
+	  //TODO: Check if -0, +0, NaN is correct here 
+	  if((value == +0) || (value == -0) || (Double.isNaN(value)))   
+		  return TSBoolean.create(false);
+	  else
+		  return TSBoolean.create(true);
+  }
 
   /** Convert Number to String
    * (<a href="http://www.ecma-international.org/ecma-262/5.1/#sec-9.8.1">ELS

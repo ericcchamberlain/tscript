@@ -119,6 +119,12 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
       numericLiteral.getValue()));
   }
 
+  public TSCompletion visit(final BooleanLiteral booleanLiteral)
+  {
+    return TSCompletion.createNormal(TSBoolean.create(
+      booleanLiteral.getValue()));
+  }
+  
   public TSCompletion visit(final PrintStatement printStatement)
   {
     TSCompletion result = visitNode(printStatement.getExp());

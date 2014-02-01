@@ -52,6 +52,15 @@ abstract class TSReference extends TSValue
   {
     return this.getValue().toNumber();
   }
+  
+  /** Get value from reference and convert it to a Boolean 
+   * (<a href="http://www.ecma-international.org/ecma-262/5.1/#sec-9.2">ELS
+   * 9.2</a>)
+   */
+  public TSBoolean toBoolean()
+  {
+	  return this.getValue().toBoolean(); 
+  }
 
   /** Get value from reference and convert it to string type. */
   public final TSString toStr()

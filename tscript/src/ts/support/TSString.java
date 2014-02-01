@@ -55,5 +55,18 @@ public final class TSString extends TSPrimitive
     assert false : "not implemented";
     return null;
   }
+  
+  /** Convert String to a Boolean 
+   * (<a href="http://www.ecma-international.org/ecma-262/5.1/#sec-9.2">ELS
+   * 9.2</a>)
+   */
+  public TSBoolean toBoolean()
+  {
+	  if( value.length() > 0 )   
+		  return TSBoolean.create(true);
+	  else
+		  return TSBoolean.create(false);
+  }
+  
 }
 

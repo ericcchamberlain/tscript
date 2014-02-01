@@ -33,5 +33,15 @@ public final class TSUndefined extends TSPrimitive
   {
     return true;
   }
+  
+  /** Convert undefined to a Boolean 
+   * (<a href="http://www.ecma-international.org/ecma-262/5.1/#sec-9.2">ELS
+   * 9.2</a>)
+   */
+  public TSBoolean toBoolean()
+  {
+	  return TSBoolean.create(false); 
+  }
+  
 }
 

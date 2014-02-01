@@ -115,7 +115,7 @@ public class TreeBuilder
     {
       b = Boolean.parseBoolean(value);
     }
-    catch(NumberFormatException nfe)
+    catch(NumberFormatException nfe) //TODO: Is this the correct exception 
     {
       Message.bug(loc, "boolean literal not parsable");
     }
