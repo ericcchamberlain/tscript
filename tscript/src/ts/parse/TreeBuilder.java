@@ -55,7 +55,7 @@ public class TreeBuilder
    *  @param  loc   location in source code (file, line, column)
    *  @param  op    the unary operator
    *  @param  child the child subtree
-      @see Binop
+      @see Unary
    */
   public static Expression buildUnaryOperator(final Location loc,
     final Unary op,

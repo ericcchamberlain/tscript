@@ -87,7 +87,11 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
     Message.setLocation(unaryOperator.getLoc());
     if (unaryOperator.getOp() == Unary.LOGICAL_NOT)
     {
-      //TODO: left.setValue(left.getValue().add(right.getValue()));
+        //TODO: Check if this is correct, I am guessing here. 
+    	if(child.getValue().toBoolean() == TSBoolean.booleanTrue)
+    		child.setValue(TSBoolean.booleanFalse);
+    	else 
+    		child.setValue(TSBoolean.booleanTrue);
     } 
     else if (unaryOperator.getOp() == Unary.UNARY_MINUS)
     {
@@ -95,7 +99,7 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
     }
     else
     {
-      assert false : "unexpected binary operator";
+      assert false : "unexpected unary operator";
     }
     return child;
   }

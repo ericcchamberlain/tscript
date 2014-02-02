@@ -9,9 +9,9 @@ package ts.support;
 public final class TSBoolean extends TSPrimitive
 {
 	/** pre-built value for true */
-	private static final TSBoolean booleanTrue = new TSBoolean(true);
+	public static final TSBoolean booleanTrue = new TSBoolean(true);
 	/** pre-built value for false */
-	private static final TSBoolean booleanFalse = new TSBoolean(false);
+	public static final TSBoolean booleanFalse = new TSBoolean(false);
 
 	// use the "create" method instead
 	private TSBoolean(final boolean value)
