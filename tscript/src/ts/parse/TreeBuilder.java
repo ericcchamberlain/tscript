@@ -109,19 +109,42 @@ public class TreeBuilder
   public static Expression buildBooleanLiteral(final Location loc,
     final String value)
   {
-    Boolean b = false;
+    Boolean b = false;  // TODO: Boolean or boolean here? 
 
     try
     {
       b = Boolean.parseBoolean(value);
     }
-    catch(NumberFormatException nfe) //TODO: Is this the correct exception 
+    catch(NumberFormatException nfe) // TODO: Is this the correct exception 
     {
       Message.bug(loc, "boolean literal not parsable");
     }
     Message.log("TreeBuilder: BooleanLiteral " + b);
     return new BooleanLiteral(loc, b);
   }
+
+//  /** Build a boolean literal expression. Converts the String for
+//   *  the value to a boolean.
+//   *
+//   *  @param  loc   location in source code (file, line, column)
+//   *  @param  value value of the literal as a String
+//   */
+//  public static Expression buildNullLiteral(final Location loc,
+//    final String value)
+//  {
+//    Boolean b = false;  // TODO: Boolean or boolean here? 
+//
+//    try
+//    {
+//      b = Boolean.parseBoolean(value);
+//    }
+//    catch(NumberFormatException nfe) // TODO: Is this the correct exception 
+//    {
+//      Message.bug(loc, "boolean literal not parsable");
+//    }
+//    Message.log("TreeBuilder: BooleanLiteral " + b);
+//    return new BooleanLiteral(loc, b);
+//  }
 
 
   /** Build a print statement.

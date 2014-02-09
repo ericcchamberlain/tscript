@@ -84,9 +84,9 @@ expression
 
 assignmentExpression
   returns [ Expression lval ]
-  : a=additiveExpression
-    { $lval = $a.lval; }
-  | l=leftHandSideExpression EQUAL r=assignmentExpression
+  : e=equalityExpression
+    { $lval = $e.lval; }
+  | l=leftHandSideExpression ASSIGN r=assignmentExpression
     { checkAssignmentDestination(loc($start), $l.lval);
       $lval = buildBinaryOperator(loc($start), Binop.ASSIGN,
         $l.lval, $r.lval); }
@@ -98,6 +98,24 @@ leftHandSideExpression
     { $lval = $p.lval; }
   ;
 
+equalityExpression
+  returns [ Expression lval ]
+  : r=relationalExpression
+    { $lval = $r.lval; }
+  | l=equalityExpression EQUALITY r=relationalExpression
+    { $lval = buildBinaryOperator(loc($start), Binop.EQUAL, $l.lval, $r.lval); }
+  ;
+
+relationalExpression
+  returns [ Expression lval ]
+  : a=additiveExpression 
+    { $lval = $a.lval; }
+  | l=relationalExpression LESS r=additiveExpression
+    { $lval = buildBinaryOperator(loc($start), Binop.LESS, $l.lval, $r.lval); }
+  | l=relationalExpression GREATER r=additiveExpression
+    { $lval = buildBinaryOperator(loc($start), Binop.GREATER, $l.lval, $r.lval); }
+  ;
+
 additiveExpression
   returns [ Expression lval ]
   : m=multiplicativeExpression
@@ -105,14 +123,6 @@ additiveExpression
   | l=additiveExpression PLUS r=multiplicativeExpression
     { $lval = buildBinaryOperator(loc($start), Binop.ADD,
         $l.lval, $r.lval); }
-  ;
-
-unaryExpression
-  returns [ Expression lval ]
-  : LOGICAL_NOT u=unaryExpression
-    { $lval = buildUnaryOperator(loc($start), Unary.LOGICAL_NOT, $u.lval); }
-  | p=primaryExpression
-    { $lval = $p.lval; }
   ;
 
 multiplicativeExpression
@@ -124,6 +134,14 @@ multiplicativeExpression
       $l.lval, $r.lval); }
   ;
 
+unaryExpression
+  returns [ Expression lval ]
+  : LOGICAL_NOT u=unaryExpression
+    { $lval = buildUnaryOperator(loc($start), Unary.LOGICAL_NOT, $u.lval); }
+  | p=primaryExpression
+    { $lval = $p.lval; }
+  ;
+
 primaryExpression
   returns [ Expression lval ]
   : IDENTIFIER
@@ -132,6 +150,8 @@ primaryExpression
     { $lval = buildNumericLiteral(loc($start), $NUMERIC_LITERAL.text); }
   | BOOLEAN_LITERAL
     { $lval = buildBooleanLiteral(loc($start), $BOOLEAN_LITERAL.text); } // not sure about this 
+  | NULL_LITERAL
+    { $lval = buildNullLiteral(loc($start), $NULL_LITERAL.text); } // not sure about this either 
   | LPAREN e=expression RPAREN
     { $lval = $e.lval; }
   ;
@@ -155,11 +175,13 @@ fragment LineTerminator : '\r' '\n' | '\r' | '\n';
 
 NUMERIC_LITERAL : DIGIT+;
 BOOLEAN_LITERAL : 'true' | 'false'; 
+NULL_LITERAL : 'null';
 
 LPAREN : [(];
 RPAREN : [)];
 SEMICOLON : [;];
-EQUAL : [=];
+ASSIGN : [=];
+EQUALITY : [=][=];
 PLUS : [+];
 ASTERISK : [*];
 LOGICAL_NOT : [!];
@@ -167,6 +189,7 @@ LESS : [<];
 GREATER : [>];
 LESS_OR_EQUAL : [<][=];
 GREATER_OR_EQUAL : [>][=];
+
 
 // keywords start here
 PRINT : 'print';
