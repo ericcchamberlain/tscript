@@ -117,6 +117,10 @@ public abstract class TSValue
 				return TSBoolean.create(false);
 			}
 		}
+		else if ((this instanceof TSString) && (right instanceof TSString))
+		{
+			
+		}
 		else 
 		{
 			return TSBoolean.create(false);

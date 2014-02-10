@@ -92,12 +92,6 @@ assignmentExpression
         $l.lval, $r.lval); }
   ;
 
-leftHandSideExpression
-  returns [ Expression lval ]
-  : p=primaryExpression
-    { $lval = $p.lval; }
-  ;
-
 equalityExpression
   returns [ Expression lval ]
   : r=relationalExpression
@@ -138,7 +132,13 @@ unaryExpression
   returns [ Expression lval ]
   : LOGICAL_NOT u=unaryExpression
     { $lval = buildUnaryOperator(loc($start), Unary.LOGICAL_NOT, $u.lval); }
-  | p=primaryExpression
+  | l=leftHandSideExpression
+    { $lval = $l.lval; }
+  ;
+
+leftHandSideExpression
+  returns [ Expression lval ]
+  : p=primaryExpression
     { $lval = $p.lval; }
   ;
 
