@@ -78,5 +78,10 @@ public class TreeVisitorBase<T> implements TreeVisitor<T>
     return null;
   }
 
+  public T visit(NullLiteral nullLiteral) 
+  {
+	return null;
+  }
+
 }
 

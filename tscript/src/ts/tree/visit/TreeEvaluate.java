@@ -23,6 +23,7 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 	public TreeEvaluate()
 	{
 		environment = TSLexicalEnvironment.newDeclarativeEnvironment(null);
+		environment.declareVariable(TSString.create("undefined"), false); // add undefined to the lexical environment 
 	}
 
 	// visit a list of ASTs and evaluate them in order
@@ -132,6 +133,11 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 	{
 		return TSCompletion.createNormal(TSBoolean.create(
 				booleanLiteral.getValue()));
+	}
+	
+	public TSCompletion visit(final NullLiteral nullLiteral)
+	{
+		return TSCompletion.createNormal(TSNull.value); // TODO: CHECK WITH PROFESSOR
 	}
 
 	public TSCompletion visit(final PrintStatement printStatement)

@@ -69,6 +69,26 @@ public final class TSBoolean extends TSPrimitive
 		else 
 			return TSString.create("false");
 	}
+
+	public TSBoolean equal(TSValue right) {
+		if (right instanceof TSBoolean)
+		{
+			TSBoolean tsbLeft = this.toBoolean(); 
+			TSBoolean tsbRight = right.toBoolean(); 
+			if (tsbLeft.value == tsbRight.value)
+			{
+				return TSBoolean.create(true);
+			}
+			else
+			{
+				return TSBoolean.create(false);
+			}
+		}
+		else 
+		{
+			return TSBoolean.create(false);
+		}
+	}
 }
 
 

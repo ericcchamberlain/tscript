@@ -83,7 +83,9 @@ public abstract class TSValue
 				rightValue.toNumber().getInternal());
 	}
 
-
+	abstract public TSBoolean equal(final TSValue right);
+	
+	/*
 	public final TSBoolean equal(final TSValue right)
 	{
 		//if both values are TSNumeber 
@@ -117,17 +119,17 @@ public abstract class TSValue
 				return TSBoolean.create(false);
 			}
 		}
-		else if ((this instanceof TSString) && (right instanceof TSString))
-		{
-			
-		}
+//		else if ((this instanceof TSString) && (right instanceof TSString))
+//		{
+//			
+//		}
 		else 
 		{
 			return TSBoolean.create(false);
 		}
 
 	}
-
+	*/
 
 
 	/** Perform an assignment. "this" is the left operand and the right

@@ -12,61 +12,67 @@ package ts.support;
 public final class TSString extends TSPrimitive
 {
 
-  private final String value;
+	private final String value;
 
-  // use the "create" method instead
-  private TSString(final String value)
-  {
-    this.value = value;
-  }
+	// use the "create" method instead
+	private TSString(final String value)
+	{
+		this.value = value;
+	}
 
-  /** Get the value of the String. */
-  public String getInternal()
-  {
-    return value;
-  }
+	/** Get the value of the String. */
+	public String getInternal()
+	{
+		return value;
+	}
 
-  /** Overrides Object.equals because TSString used as key for Map */
-  public boolean equals(Object anObject)
-  {
-    if (anObject instanceof TSString)
-    {
-      return value.equals(((TSString) anObject).getInternal());
-    }
-    return false;
-  }
+	/** Overrides Object.equals because TSString used as key for Map */
+	public boolean equals(Object anObject)
+	{
+		if (anObject instanceof TSString)
+		{
+			return value.equals(((TSString) anObject).getInternal());
+		}
+		return false;
+	}
 
-  /** Need to override Object.hashcode() when overriding Object.equals() */
-  public int hashCode()
-  {
-    return value.hashCode();
-  }
+	/** Need to override Object.hashcode() when overriding Object.equals() */
+	public int hashCode()
+	{
+		return value.hashCode();
+	}
 
-  /** Create a Tscript String from a Java String. */
-  public static TSString create(final String value)
-  {
-    // could use hashmap to screen for common strings?
-    return new TSString(value);
-  }
+	/** Create a Tscript String from a Java String. */
+	public static TSString create(final String value)
+	{
+		// could use hashmap to screen for common strings?
+		return new TSString(value);
+	}
 
-  /** Convert String to Number. Not yet Implemented. */
-  public TSNumber toNumber()
-  {
-    assert false : "not implemented";
-    return null;
-  }
-  
-  /** Convert String to a Boolean 
-   * (<a href="http://www.ecma-international.org/ecma-262/5.1/#sec-9.2">ELS
-   * 9.2</a>)
-   */
-  public TSBoolean toBoolean()
-  {
-	  if( value.length() > 0 )   
-		  return TSBoolean.create(true);
-	  else
-		  return TSBoolean.create(false);
-  }
-  
+	/** Convert String to Number. Not yet Implemented. */
+	public TSNumber toNumber()
+	{
+		assert false : "not implemented";
+	return null;
+	}
+
+	/** Convert String to a Boolean 
+	 * (<a href="http://www.ecma-international.org/ecma-262/5.1/#sec-9.2">ELS
+	 * 9.2</a>)
+	 */
+	public TSBoolean toBoolean()
+	{
+		if( value.length() > 0 )   
+			return TSBoolean.create(true);
+		else
+			return TSBoolean.create(false);
+	}
+
+
+	public TSBoolean equal(TSValue right) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
 

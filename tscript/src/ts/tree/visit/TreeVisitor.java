@@ -25,5 +25,7 @@ public interface TreeVisitor<T>
   T visit(UnaryOperator unaryOperator);
 
   T visit(VarStatement varStatement);
+
+  T visit(NullLiteral nullLiteral);
 }
 

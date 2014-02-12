@@ -8,40 +8,56 @@ package ts.support;
  */
 public final class TSUndefined extends TSPrimitive
 {
-  /** Single value for this singleton class. */
-  public static final TSUndefined value = new TSUndefined();
+	/** Single value for this singleton class. */
+	public static final TSUndefined value = new TSUndefined();
 
-  // hide the constructor
-  private TSUndefined()
-  {
-  }
+	// hide the constructor
+	private TSUndefined()
+	{
+	}
 
-  /** Convert to Number. Undefined gets mapped to NaN. */
-  public TSNumber toNumber()
-  {
-    return TSNumber.create(Double.NaN);
-  }
+	/** Convert to Number. Undefined gets mapped to NaN. */
+	public TSNumber toNumber()
+	{
+		return TSNumber.create(Double.NaN);
+	}
 
-  /** Convert to String ("undefined"). */
-  public TSString toStr()
-  {
-    return TSString.create("undefined");
-  }
+	/** Convert to String ("undefined"). */
+	public TSString toStr()
+	{
+		return TSString.create("undefined");
+	}
 
-  /** Always returns true. */
-  public boolean isUndefined()
-  {
-    return true;
-  }
-  
-  /** Convert undefined to a Boolean 
-   * (<a href="http://www.ecma-international.org/ecma-262/5.1/#sec-9.2">ELS
-   * 9.2</a>)
-   */
-  public TSBoolean toBoolean()
-  {
-	  return TSBoolean.create(false); 
-  }
-  
+	/** Always returns true. */
+	public boolean isUndefined()
+	{
+		return true;
+	}
+
+	/** Convert undefined to a Boolean 
+	 * (<a href="http://www.ecma-international.org/ecma-262/5.1/#sec-9.2">ELS
+	 * 9.2</a>)
+	 */
+	public TSBoolean toBoolean()
+	{
+		return TSBoolean.create(false); 
+	}
+
+
+	public TSBoolean equal(TSValue right) {
+		if (right instanceof TSUndefined)
+		{
+			return TSBoolean.create(true);
+		}
+		else if (right instanceof TSNull)
+		{
+			return TSBoolean.create(true);
+		}
+		else 
+		{
+			return TSBoolean.create(false);
+		}
+	}
+
 }
 

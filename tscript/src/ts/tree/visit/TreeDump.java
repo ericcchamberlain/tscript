@@ -129,5 +129,12 @@ public final class TreeDump extends TreeVisitorBase<Object>
     return null;
   }
 
+  public Object visit(final NullLiteral nullLiteral)
+  {
+    indent();
+    writer.println("NullLiteral " + nullLiteral); // TODO: CHECK IF THIS IS CORRECT
+    return null;
+  }
+
 }
 
