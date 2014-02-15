@@ -63,7 +63,7 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 		{
 			left.setValue(left.getValue().add(right.getValue()));
 		}
-		if (binaryOperator.getOp() == Binop.SUBTRACT)
+		else if (binaryOperator.getOp() == Binop.SUBTRACT)
 		{
 			left.setValue(left.getValue().subtract(right.getValue()));
 		}

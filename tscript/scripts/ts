@@ -1,9 +1,0 @@
-#!/bin/bash
-
-# translate and execute a Tscript program
-#
-
-TS_ROOT="TSCRIPTROOTGOESHERE"
-
-java -ea -cp "$TS_ROOT/build/packages:$TS_ROOT/build/lib/antlr.jar" ts.Main $@
-
