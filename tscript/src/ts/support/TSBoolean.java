@@ -70,12 +70,11 @@ public final class TSBoolean extends TSPrimitive
 			return TSString.create("false");
 	}
 
-	public TSBoolean equal(TSValue right) {
+	public TSBoolean equalsOperator(TSValue right) {
 		if (right instanceof TSBoolean)
 		{
-			TSBoolean tsbLeft = this.toBoolean(); 
 			TSBoolean tsbRight = right.toBoolean(); 
-			if (tsbLeft.value == tsbRight.value)
+			if (this.value == tsbRight.value)
 			{
 				return TSBoolean.create(true);
 			}
@@ -86,8 +85,13 @@ public final class TSBoolean extends TSPrimitive
 		}
 		else 
 		{
-			return TSBoolean.create(false);
+			return this.toNumber().equalsOperator(right);
 		}
+	}
+	
+	public TSValue abstractRelationalComparison(final TSValue right)
+	{
+		return this.toNumber().abstractRelationalComparison(right);
 	}
 }
 

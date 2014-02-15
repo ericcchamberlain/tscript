@@ -63,15 +63,14 @@ public final class TSNumber extends TSPrimitive
 	}
 
 
-	public final TSBoolean equal(final TSValue right)
+	public TSBoolean equalsOperator(final TSValue right)
 	{
 		//if both values are TSNumeber 
 		if (right instanceof TSNumber)
 		{
-			TSNumber tsnLeft = this.toNumber();         //TODO: Do not need toNumber
-			TSNumber tsnRight = right.toNumber();       //TODO: Do not need toNumber
+			TSNumber tsnRight = right.toNumber();		 //TODO: toNumber?
 			// if left if NaN return false 
-			if (Double.isNaN(tsnLeft.getInternal()))
+			if (Double.isNaN(this.getInternal()))
 			{
 				return TSBoolean.create(false); 
 			}
@@ -81,7 +80,7 @@ public final class TSNumber extends TSPrimitive
 				return TSBoolean.create(false); 
 			}
 			// if left is the same Number value as y, return true
-			else if (tsnLeft.getInternal() == tsnRight.getInternal())
+			else if (this.getInternal() == tsnRight.getInternal())
 			{
 				return TSBoolean.create(true); 
 			}
@@ -98,7 +97,12 @@ public final class TSNumber extends TSPrimitive
 		}
 		else if (right instanceof TSString)
 		{
-			return this
+			//return left == ToNumber(right) 
+			return this.equalsOperator(right.toNumber());  //TODO: Check if this is correct 
+		}
+		else if (right instanceof TSBoolean)
+		{
+			return this.equalsOperator(right.toNumber());
 		}
 		else 
 		{
@@ -107,6 +111,55 @@ public final class TSNumber extends TSPrimitive
 	}
 
 
+	public TSValue abstractRelationalComparison(final TSValue right)
+	{
+		TSNumber ny = right.toNumber();
+		// if nx is NaN return undefined 
+		if (Double.isNaN(this.getInternal())){
+			return TSUndefined.value; 
+		}
+		// if ny is NaN return undefined 
+		else if (Double.isNaN(ny.getInternal()))
+		{
+			return TSUndefined.value;
+		}
+		// if nx and ny are equal, return false
+		// ( also covers +0 == -0 and -0 == +0 )
+		else if (this.getInternal() == ny.getInternal())
+		{
+			return TSBoolean.booleanFalse;
+		}
+		// if nx is +infinity return false
+		else if (this.getInternal() == Double.POSITIVE_INFINITY)
+		{
+			return TSBoolean.booleanFalse;
+		}
+		// if ny is +infinity return true
+		else if (ny.getInternal() == Double.POSITIVE_INFINITY)
+		{
+			return TSBoolean.booleanTrue;
+		}
+		// if ny is -infinity return false
+		else if (ny.getInternal() == Double.NEGATIVE_INFINITY)
+		{
+			return TSBoolean.booleanFalse;
+		}
+		// if nx is -infinity return true
+		else if (this.getInternal() == Double.NEGATIVE_INFINITY)
+		{
+			return TSBoolean.booleanTrue;
+		}
+		// else if nx < ny return true
+		else if (this.getInternal() < ny.getInternal())
+		{
+			return TSBoolean.booleanTrue;
+		}
+		// else return false 
+		else 
+		{
+			return TSBoolean.booleanFalse;
+		}
+	}
 
 	/** Convert Number to String
 	 * (<a href="http://www.ecma-international.org/ecma-262/5.1/#sec-9.8.1">ELS

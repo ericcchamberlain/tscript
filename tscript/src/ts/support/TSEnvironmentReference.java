@@ -10,67 +10,81 @@ import ts.Message;
  */
 final class TSEnvironmentReference extends TSReference
 {
-  private TSEnvironmentRecord base;
+	private TSEnvironmentRecord base;
 
-  /** Create a Reference for a name in an environment. */
-  TSEnvironmentReference(final TSString name, final TSEnvironmentRecord base)
-  {
-    super(name);
-    this.base = base;
-  }
+	/** Create a Reference for a name in an environment. */
+	TSEnvironmentReference(final TSString name, final TSEnvironmentRecord base)
+	{
+		super(name);
+		this.base = base;
+	}
 
-  /** Is the reference not resolvable? That is, is the name not defined
-   *  in the environment?
-   */
-  boolean isUnresolvableReference()
-  {
-    // base is always defined for environment reference
-    // TODO: well it should be. but we don't support property references yet.
-    //       so right now the base is null if the identifier is not defined.
-    // TSLexicalEnvironment.getIdentifierReference creates a property descriptor
-    // with an undefined base if the identifier cannot be resolved.
-    //return false;
-    return (base == null);
-  }
+	/** Is the reference not resolvable? That is, is the name not defined
+	 *  in the environment?
+	 */
+	boolean isUnresolvableReference()
+	{
+		// base is always defined for environment reference
+		// TODO: well it should be. but we don't support property references yet.
+		//       so right now the base is null if the identifier is not defined.
+		// TSLexicalEnvironment.getIdentifierReference creates a property descriptor
+		// with an undefined base if the identifier cannot be resolved.
+		//return false;
+		return (base == null);
+	}
 
-  /** Environment references cannot be property references so this always
-   *  returns false.
-   */
-  boolean isPropertyReference()
-  {
-    return false;
-  }
+	/** Environment references cannot be property references so this always
+	 *  returns false.
+	 */
+	boolean isPropertyReference()
+	{
+		return false;
+	}
 
-  //
-  // operations on References in expressions
-  //   must be public because they override public methods
-  // TODO: for now base is null to indicate the identifier is not declared,
-  //       which we treat now as an error
+	//
+	// operations on References in expressions
+	//   must be public because they override public methods
+	// TODO: for now base is null to indicate the identifier is not declared,
+	//       which we treat now as an error
 
-  /** Get the value from the Reference. Issues an error and
-   *  returns null if the name is not defined.
-   */
-  public TSValue getValue()
-  {
-    if (base == null)
-    {
-      Message.evaluationError("undefined identifier: " +
-        this.getReferencedName().getInternal());
-    }
-    return base.getBindingValue(this.getReferencedName());
-  }
+	/** Get the value from the Reference. Issues an error and
+	 *  returns null if the name is not defined.
+	 */
+	public TSValue getValue()
+	{
+		if (base == null)
+		{
+			Message.evaluationError("undefined identifier: " +
+					this.getReferencedName().getInternal());
+		}
+		return base.getBindingValue(this.getReferencedName());
+	}
 
-  /** Assign a value to the name specified by the Reference. */
-  public void putValue(final TSValue value)
-  {
-    if (base == null)
-    {
-      Message.evaluationError("undefined identifier: " +
-        this.getReferencedName().getInternal());
-    }
-    base.setMutableBinding(this.getReferencedName(), value);
-    return;
-  }
+	/** Assign a value to the name specified by the Reference. */
+	public void putValue(final TSValue value)
+	{
+		if (base == null)
+		{
+			Message.evaluationError("undefined identifier: " +
+					this.getReferencedName().getInternal());
+		}
+		base.setMutableBinding(this.getReferencedName(), value);
+		return;
+	}
+
+
+	// if left is a reference type, get the values and recurse 
+	// THIS SHOULD NEVER ACTUALLY HAPPEN, IN THEORY 
+	public TSBoolean equalsOperator(TSValue right) {
+		return this.getValue().equalsOperator(right);
+	}
+	
+	public TSValue abstractRelationalComparison(final TSValue right)
+	{
+		return this.getValue().abstractRelationalComparison(right);
+	}
+
+
 
 }
 

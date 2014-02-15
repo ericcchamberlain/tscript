@@ -68,11 +68,49 @@ public final class TSString extends TSPrimitive
 			return TSBoolean.create(false);
 	}
 
-
-	public TSBoolean equal(TSValue right) {
-		// TODO Auto-generated method stub
-		return null;
+	public TSBoolean equalsOperator(TSValue right) {
+		if (right instanceof TSNumber)
+		{
+			return this.toNumber().equalsOperator(right); 
+		}
+		else if (right instanceof TSString)
+		{
+			if(this.getInternal() == right.toStr().getInternal())
+			{
+				return TSBoolean.create(true);
+			}
+			else
+			{
+				return TSBoolean.create(false);
+			}
+		}
+		else if (right instanceof TSBoolean)
+		{
+			return this.equalsOperator(right.toNumber());
+		}
+		else 
+		{
+			return TSBoolean.create(false);
+		}
 	}
-
+	
+	public TSValue abstractRelationalComparison(final TSValue right)
+	{
+		if (right instanceof TSString)
+		{
+			if (this.getInternal().compareTo(right.toStr().getInternal()) <= 0)
+			{
+				return TSBoolean.booleanFalse;
+			}
+			else
+			{
+				return TSBoolean.booleanTrue; 
+			}
+		}
+		else
+		{
+			return this.toNumber().abstractRelationalComparison(right);
+		}
+	}
 }
 

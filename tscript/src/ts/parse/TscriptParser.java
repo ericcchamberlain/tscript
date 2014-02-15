@@ -22,15 +22,15 @@ public class TscriptParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		NUMERIC_LITERAL=1, BOOLEAN_LITERAL=2, NULL_LITERAL=3, LPAREN=4, RPAREN=5, 
-		SEMICOLON=6, ASSIGN=7, EQUALITY=8, PLUS=9, ASTERISK=10, LOGICAL_NOT=11, 
-		LESS=12, GREATER=13, LESS_OR_EQUAL=14, GREATER_OR_EQUAL=15, PRINT=16, 
-		VAR=17, IDENTIFIER=18, WhiteSpace=19;
+		NUMERIC_LITERAL=1, BOOLEAN_LITERAL=2, NULL_LITERAL=3, STRING_LITERAL=4, 
+		LPAREN=5, RPAREN=6, SEMICOLON=7, ASSIGN=8, EQUALITY=9, PLUS=10, ASTERISK=11, 
+		LOGICAL_NOT=12, LESS=13, GREATER=14, LESS_OR_EQUAL=15, GREATER_OR_EQUAL=16, 
+		PRINT=17, VAR=18, IDENTIFIER=19, WhiteSpace=20;
 	public static final String[] tokenNames = {
-		"<INVALID>", "NUMERIC_LITERAL", "BOOLEAN_LITERAL", "'null'", "LPAREN", 
-		"RPAREN", "SEMICOLON", "ASSIGN", "EQUALITY", "PLUS", "ASTERISK", "LOGICAL_NOT", 
-		"LESS", "GREATER", "LESS_OR_EQUAL", "GREATER_OR_EQUAL", "'print'", "'var'", 
-		"IDENTIFIER", "WhiteSpace"
+		"<INVALID>", "NUMERIC_LITERAL", "BOOLEAN_LITERAL", "'null'", "STRING_LITERAL", 
+		"LPAREN", "RPAREN", "SEMICOLON", "ASSIGN", "EQUALITY", "PLUS", "ASTERISK", 
+		"LOGICAL_NOT", "LESS", "GREATER", "LESS_OR_EQUAL", "GREATER_OR_EQUAL", 
+		"'print'", "'var'", "IDENTIFIER", "WhiteSpace"
 	};
 	public static final int
 		RULE_program = 0, RULE_statementList = 1, RULE_statement = 2, RULE_varStatement = 3, 
@@ -983,7 +983,7 @@ public class TscriptParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\uacf5\uee8c\u4f5d\u8b0d\u4a45\u78bd\u1b2f\u3378\3\25\u00af\4\2\t\2"+
+		"\3\uacf5\uee8c\u4f5d\u8b0d\u4a45\u78bd\u1b2f\u3378\3\26\u00af\4\2\t\2"+
 		"\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
 		"\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\3\2\3\2\3\2\3\2\3"+
 		"\3\3\3\3\3\3\3\3\3\3\3\3\3\7\3,\n\3\f\3\16\3/\13\3\3\4\3\4\3\4\3\4\3\4"+
@@ -1003,31 +1003,31 @@ public class TscriptParser extends Parser {
 		"\'(\6\3\2\3()\5\6\4\2)*\b\3\1\2*,\3\2\2\2+\'\3\2\2\2,/\3\2\2\2-+\3\2\2"+
 		"\2-.\3\2\2\2.\5\3\2\2\2/-\3\2\2\2\60\61\5\b\5\2\61\62\b\4\1\2\62:\3\2"+
 		"\2\2\63\64\5\n\6\2\64\65\b\4\1\2\65:\3\2\2\2\66\67\5\f\7\2\678\b\4\1\2"+
-		"8:\3\2\2\29\60\3\2\2\29\63\3\2\2\29\66\3\2\2\2:\7\3\2\2\2;<\7\23\2\2<"+
-		"=\7\24\2\2=>\7\b\2\2>?\b\5\1\2?\t\3\2\2\2@A\5\16\b\2AB\7\b\2\2BC\b\6\1"+
-		"\2C\13\3\2\2\2DE\7\22\2\2EF\5\16\b\2FG\7\b\2\2GH\b\7\1\2H\r\3\2\2\2IJ"+
+		"8:\3\2\2\29\60\3\2\2\29\63\3\2\2\29\66\3\2\2\2:\7\3\2\2\2;<\7\24\2\2<"+
+		"=\7\25\2\2=>\7\t\2\2>?\b\5\1\2?\t\3\2\2\2@A\5\16\b\2AB\7\t\2\2BC\b\6\1"+
+		"\2C\13\3\2\2\2DE\7\23\2\2EF\5\16\b\2FG\7\t\2\2GH\b\7\1\2H\r\3\2\2\2IJ"+
 		"\5\20\t\2JK\b\b\1\2K\17\3\2\2\2LM\5\22\n\2MN\b\t\1\2NU\3\2\2\2OP\5\34"+
-		"\17\2PQ\7\t\2\2QR\5\20\t\2RS\b\t\1\2SU\3\2\2\2TL\3\2\2\2TO\3\2\2\2U\21"+
-		"\3\2\2\2VW\b\n\1\2WX\5\24\13\2XY\b\n\1\2Ya\3\2\2\2Z[\6\n\3\3[\\\7\n\2"+
+		"\17\2PQ\7\n\2\2QR\5\20\t\2RS\b\t\1\2SU\3\2\2\2TL\3\2\2\2TO\3\2\2\2U\21"+
+		"\3\2\2\2VW\b\n\1\2WX\5\24\13\2XY\b\n\1\2Ya\3\2\2\2Z[\6\n\3\3[\\\7\13\2"+
 		"\2\\]\5\24\13\2]^\b\n\1\2^`\3\2\2\2_Z\3\2\2\2`c\3\2\2\2a_\3\2\2\2ab\3"+
 		"\2\2\2b\23\3\2\2\2ca\3\2\2\2de\b\13\1\2ef\5\26\f\2fg\b\13\1\2gt\3\2\2"+
-		"\2hi\6\13\4\3ij\7\16\2\2jk\5\26\f\2kl\b\13\1\2ls\3\2\2\2mn\6\13\5\3no"+
-		"\7\17\2\2op\5\26\f\2pq\b\13\1\2qs\3\2\2\2rh\3\2\2\2rm\3\2\2\2sv\3\2\2"+
+		"\2hi\6\13\4\3ij\7\17\2\2jk\5\26\f\2kl\b\13\1\2ls\3\2\2\2mn\6\13\5\3no"+
+		"\7\20\2\2op\5\26\f\2pq\b\13\1\2qs\3\2\2\2rh\3\2\2\2rm\3\2\2\2sv\3\2\2"+
 		"\2tr\3\2\2\2tu\3\2\2\2u\25\3\2\2\2vt\3\2\2\2wx\b\f\1\2xy\5\30\r\2yz\b"+
-		"\f\1\2z\u0082\3\2\2\2{|\6\f\6\3|}\7\13\2\2}~\5\30\r\2~\177\b\f\1\2\177"+
+		"\f\1\2z\u0082\3\2\2\2{|\6\f\6\3|}\7\f\2\2}~\5\30\r\2~\177\b\f\1\2\177"+
 		"\u0081\3\2\2\2\u0080{\3\2\2\2\u0081\u0084\3\2\2\2\u0082\u0080\3\2\2\2"+
 		"\u0082\u0083\3\2\2\2\u0083\27\3\2\2\2\u0084\u0082\3\2\2\2\u0085\u0086"+
 		"\b\r\1\2\u0086\u0087\5\32\16\2\u0087\u0088\b\r\1\2\u0088\u0090\3\2\2\2"+
-		"\u0089\u008a\6\r\7\3\u008a\u008b\7\f\2\2\u008b\u008c\5\32\16\2\u008c\u008d"+
+		"\u0089\u008a\6\r\7\3\u008a\u008b\7\r\2\2\u008b\u008c\5\32\16\2\u008c\u008d"+
 		"\b\r\1\2\u008d\u008f\3\2\2\2\u008e\u0089\3\2\2\2\u008f\u0092\3\2\2\2\u0090"+
 		"\u008e\3\2\2\2\u0090\u0091\3\2\2\2\u0091\31\3\2\2\2\u0092\u0090\3\2\2"+
-		"\2\u0093\u0094\7\r\2\2\u0094\u0095\5\32\16\2\u0095\u0096\b\16\1\2\u0096"+
+		"\2\u0093\u0094\7\16\2\2\u0094\u0095\5\32\16\2\u0095\u0096\b\16\1\2\u0096"+
 		"\u009b\3\2\2\2\u0097\u0098\5\34\17\2\u0098\u0099\b\16\1\2\u0099\u009b"+
 		"\3\2\2\2\u009a\u0093\3\2\2\2\u009a\u0097\3\2\2\2\u009b\33\3\2\2\2\u009c"+
-		"\u009d\5\36\20\2\u009d\u009e\b\17\1\2\u009e\35\3\2\2\2\u009f\u00a0\7\24"+
+		"\u009d\5\36\20\2\u009d\u009e\b\17\1\2\u009e\35\3\2\2\2\u009f\u00a0\7\25"+
 		"\2\2\u00a0\u00ad\b\20\1\2\u00a1\u00a2\7\3\2\2\u00a2\u00ad\b\20\1\2\u00a3"+
 		"\u00a4\7\4\2\2\u00a4\u00ad\b\20\1\2\u00a5\u00a6\7\5\2\2\u00a6\u00ad\b"+
-		"\20\1\2\u00a7\u00a8\7\6\2\2\u00a8\u00a9\5\16\b\2\u00a9\u00aa\7\7\2\2\u00aa"+
+		"\20\1\2\u00a7\u00a8\7\7\2\2\u00a8\u00a9\5\16\b\2\u00a9\u00aa\7\b\2\2\u00aa"+
 		"\u00ab\b\20\1\2\u00ab\u00ad\3\2\2\2\u00ac\u009f\3\2\2\2\u00ac\u00a1\3"+
 		"\2\2\2\u00ac\u00a3\3\2\2\2\u00ac\u00a5\3\2\2\2\u00ac\u00a7\3\2\2\2\u00ad"+
 		"\37\3\2\2\2\f-9Tart\u0082\u0090\u009a\u00ac";

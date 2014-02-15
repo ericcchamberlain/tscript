@@ -176,6 +176,8 @@ fragment LineTerminator : '\r' '\n' | '\r' | '\n';
 NUMERIC_LITERAL : DIGIT+;
 BOOLEAN_LITERAL : 'true' | 'false'; 
 NULL_LITERAL : 'null'; 
+STRING_LITERAL : ["]~["\n\r]*["] | [']~[\'\n\r]*['];
+
 
 LPAREN : [(];
 RPAREN : [)];

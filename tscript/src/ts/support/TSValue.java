@@ -44,6 +44,35 @@ public abstract class TSValue
 
 	abstract public TSBoolean toBoolean();
 
+	abstract public TSBoolean equalsOperator(final TSValue right);
+	
+	abstract public TSValue abstractRelationalComparison(final TSValue right);
+
+	public TSBoolean lessThanOperator(final TSValue right)
+	{
+		TSValue r = this.getValue().toPrimitive().abstractRelationalComparison(right.getValue().toPrimitive());
+		if (r instanceof TSUndefined) 
+		{
+			return TSBoolean.create(false);
+		}
+		else 
+		{
+			return r.toBoolean(); 
+		}
+	}
+	
+	public TSBoolean greaterThanOperator(final TSValue right)
+	{
+		TSValue r = right.getValue().toPrimitive().abstractRelationalComparison(this.getValue().toPrimitive());
+		if (r instanceof TSUndefined) 
+		{
+			return TSBoolean.create(false);
+		}
+		else 
+		{
+			return r.toBoolean(); 
+		}
+	}
 
 	/** Convert to String. Override for all primitive types and TSReference.
 	 *  It can't be called toString because of Object.toString.
@@ -58,7 +87,7 @@ public abstract class TSValue
 	//
 	// binary operators (sections 11.5-11.11)
 	//
-
+	
 	/** Perform a multiply. "this" is the left operand and the right
 	 *  operand is given by the parameter. Both operands are converted
 	 *  to Number before the multiply.
@@ -82,55 +111,6 @@ public abstract class TSValue
 		return TSNumber.create(leftValue.toNumber().getInternal() +
 				rightValue.toNumber().getInternal());
 	}
-
-	abstract public TSBoolean equal(final TSValue right);
-	
-	/*
-	public final TSBoolean equal(final TSValue right)
-	{
-		//if both values are TSNumeber 
-		if ((this instanceof TSNumber) && (right instanceof TSNumber))
-		{
-			TSNumber tsnLeft = this.toNumber();
-			TSNumber tsnRight = right.toNumber(); 
-			// if left if NaN return false 
-			if (Double.isNaN(tsnLeft.getInternal()))
-			{
-				return TSBoolean.create(false); 
-			}
-			// if right is NaN return false
-			else if (Double.isNaN(tsnRight.getInternal()))
-			{
-				return TSBoolean.create(false); 
-			}
-			// if left is the same Number value as y, return true
-			else if (tsnLeft.getInternal() == tsnRight.getInternal())
-			{
-				return TSBoolean.create(true); 
-			}
-			// TODO: if left is +0 and right is -0 return true
-			// TODO: if left is -0 and right is +0 return true
-			// I believe since +0 and -0 are equal in Java, that these two cases
-			// will be picked up by the previously implemented case
-			// -----------------------------------------------------------------
-			// else return false
-			else 
-			{
-				return TSBoolean.create(false);
-			}
-		}
-//		else if ((this instanceof TSString) && (right instanceof TSString))
-//		{
-//			
-//		}
-		else 
-		{
-			return TSBoolean.create(false);
-		}
-
-	}
-	*/
-
 
 	/** Perform an assignment. "this" is the left operand and the right
 	 *  operand is given by the parameter.

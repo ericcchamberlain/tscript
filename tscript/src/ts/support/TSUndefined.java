@@ -44,7 +44,7 @@ public final class TSUndefined extends TSPrimitive
 	}
 
 
-	public TSBoolean equal(TSValue right) {
+	public TSBoolean equalsOperator(TSValue right) {
 		if (right instanceof TSUndefined)
 		{
 			return TSBoolean.create(true);
@@ -53,10 +53,19 @@ public final class TSUndefined extends TSPrimitive
 		{
 			return TSBoolean.create(true);
 		}
+		else if (right instanceof TSBoolean)
+		{
+			return this.equalsOperator(right.toNumber());
+		}
 		else 
 		{
 			return TSBoolean.create(false);
 		}
+	}
+	
+	public TSValue abstractRelationalComparison(final TSValue right)
+	{
+		return this.toNumber().abstractRelationalComparison(right);
 	}
 
 }

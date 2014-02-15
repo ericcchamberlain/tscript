@@ -39,7 +39,7 @@ public final class TSNull extends TSPrimitive
 		return TSString.create("null");
 	}
 
-	public TSBoolean equal(TSValue right) {
+	public TSBoolean equalsOperator(TSValue right) {
 		if (right instanceof TSNull)
 		{
 			return TSBoolean.create(true);
@@ -48,10 +48,19 @@ public final class TSNull extends TSPrimitive
 		{
 			return TSBoolean.create(true);
 		}
+		else if (right instanceof TSBoolean)
+		{
+			return this.equalsOperator(right.toNumber());
+		}
 		else 
 		{
 			return TSBoolean.create(false);
 		}
+	}
+	
+	public TSValue abstractRelationalComparison(final TSValue right)
+	{
+		return this.toNumber().abstractRelationalComparison(right);
 	}
 
 }
