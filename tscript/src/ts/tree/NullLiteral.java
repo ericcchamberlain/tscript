@@ -16,7 +16,7 @@ public final class NullLiteral extends Expression
     super(loc);
   }
 
-  //TODO: DO I NEED A getvalue() function here ? 
+  //TODO: DO I NEED A getValue() function?
 
   public <T> T apply(TreeVisitor<T> visitor)
   {

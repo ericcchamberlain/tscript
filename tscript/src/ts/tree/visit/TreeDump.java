@@ -94,6 +94,13 @@ public final class TreeDump extends TreeVisitorBase<Object>
     writer.println("NumericLiteral " + numericLiteral.getValue());
     return null;
   }
+  
+  public Object visit(final StringLiteral stringLiteral)
+  {
+    indent();
+    writer.println("StringLiteral " + stringLiteral.getValue());
+    return null;
+  }
 
     public Object visit(final BooleanLiteral booleanLiteral)
   {

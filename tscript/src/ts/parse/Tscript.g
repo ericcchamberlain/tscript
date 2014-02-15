@@ -149,9 +149,11 @@ primaryExpression
   | NUMERIC_LITERAL
     { $lval = buildNumericLiteral(loc($start), $NUMERIC_LITERAL.text); }
   | BOOLEAN_LITERAL
-    { $lval = buildBooleanLiteral(loc($start), $BOOLEAN_LITERAL.text); } // not sure about this 
+    { $lval = buildBooleanLiteral(loc($start), $BOOLEAN_LITERAL.text); }
   | NULL_LITERAL
-    { $lval = buildNullLiteral(loc($start)); } // not sure about this either 
+    { $lval = buildNullLiteral(loc($start)); }
+  | STRING_LITERAL
+    { $lval = buildStringLiteral(loc($start), $STRING_LITERAL.text); }
   | LPAREN e=expression RPAREN
     { $lval = $e.lval; }
   ;
@@ -176,7 +178,7 @@ fragment LineTerminator : '\r' '\n' | '\r' | '\n';
 NUMERIC_LITERAL : DIGIT+;
 BOOLEAN_LITERAL : 'true' | 'false'; 
 NULL_LITERAL : 'null'; 
-STRING_LITERAL : ["]~["\n\r]*["] | [']~[\'\n\r]*['];
+STRING_LITERAL : ["]~["\n\r]*["] | [']~['\n\r]*['];
 
 
 LPAREN : [(];

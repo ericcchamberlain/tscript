@@ -12,11 +12,11 @@ a = 3;			//
 //print (a == 4);	// false
 var b;			//
 b = 3;			//
-print a == b;	// true 
-print a == true;  // false
+print a == b;	// true X
+print a == true;  // false 
 print a == false; // false
 print null == null; // true
-print null == undefined; //true
+print null == undefined; //true X
 //print undefined == null; //true
 
 

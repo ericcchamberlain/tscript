@@ -100,6 +100,29 @@ public class TreeBuilder
 		return new NumericLiteral(loc, d);
 	}
 
+    /** Build a string literal expression. Converts the String for
+     *  the value to a double.
+     *
+     *  @param  loc   location in source code (file, line, column)
+     *  @param  value value of the literal as a String
+     */
+    public static Expression buildStringLiteral(final Location loc,
+            final String value)
+    {
+        String s;
+
+        try
+        {
+            s = value.substring(1, value.length() - 1); // TODO: CHECK IF THIS WORKS WITH EMPTY STRING 
+        }
+        catch(Exception e)
+        {
+            Message.bug(loc, "string literal not parsable");
+        }
+        Message.log("TreeBuilder: StringLiteral " + s);
+        return new StringLiteral(loc, s);
+    }
+
 	/** Build a boolean literal expression. Converts the String for
 	 *  the value to a boolean.
 	 *
