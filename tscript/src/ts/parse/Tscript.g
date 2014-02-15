@@ -117,6 +117,9 @@ additiveExpression
   | l=additiveExpression PLUS r=multiplicativeExpression
     { $lval = buildBinaryOperator(loc($start), Binop.ADD,
         $l.lval, $r.lval); }
+  | l=additiveExpression MINUS r=multiplicativeExpression
+    { $lval = buildBinaryOperator(loc($start), Binop.SUBTRACT,
+        $l.lval, $r.lval); }
   ;
 
 multiplicativeExpression
@@ -187,7 +190,9 @@ SEMICOLON : [;];
 ASSIGN : [=];
 EQUALITY : [=][=];
 PLUS : [+];
+MINUS : [-];
 ASTERISK : [*];
+DIVIDE : [/];
 LOGICAL_NOT : [!];
 LESS : [<];
 GREATER : [>];

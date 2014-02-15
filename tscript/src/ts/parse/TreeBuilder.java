@@ -109,7 +109,7 @@ public class TreeBuilder
     public static Expression buildStringLiteral(final Location loc,
             final String value)
     {
-        String s;
+        String s = "";
 
         try
         {
