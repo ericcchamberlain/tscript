@@ -1,3 +1,4 @@
+// patched 1/30/2014 to remove incorrect error check in getBindingValue
 
 package ts.support;
 
@@ -78,10 +79,6 @@ final class TSDeclarativeEnvironmentRecord extends TSEnvironmentRecord
     }
 
     TSValue value = binding.getValue();
-    if (value instanceof TSUndefined) // binding not initialized
-    {
-      Message.evaluationError("binding is not initialized");
-    }
     return value;
   }
 
