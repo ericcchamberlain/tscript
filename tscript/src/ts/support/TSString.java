@@ -52,8 +52,20 @@ public final class TSString extends TSPrimitive
 	/** Convert String to Number. Not yet Implemented. */
 	public TSNumber toNumber()
 	{
-		assert false : "not implemented";
-	return null;
+		// TODO: MAKING ASSUMPTION THAT JAVA AND JAVASCRIPT DO THIS THE SAME WAY. 
+		try {
+			double d = Double.parseDouble(value);
+			return TSNumber.create(d);
+		} catch (Exception e) {
+			return TSNumber.create(Double.NaN);
+		}
+	}
+
+
+	/** Convert String to String. */
+	public TSString toStr()
+	{
+		return this;
 	}
 
 	/** Convert String to a Boolean 

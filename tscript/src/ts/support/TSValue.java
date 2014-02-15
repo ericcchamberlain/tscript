@@ -108,8 +108,16 @@ public abstract class TSValue
 		TSPrimitive leftValue = this.toPrimitive();
 		TSPrimitive rightValue = right.toPrimitive();
 
-		return TSNumber.create(leftValue.toNumber().getInternal() +
-				rightValue.toNumber().getInternal());
+		if (leftValue instanceof TSString || rightValue instanceof TSString)
+		{
+			return TSString.create(leftValue.toStr().getInternal().concat(right.toStr().getInternal()));
+		}
+		else 
+		{
+			return TSNumber.create(leftValue.toNumber().getInternal() +
+					rightValue.toNumber().getInternal());
+		}
+		
 	}
 	
 	/** Perform a subtraction. "this" is the left operand and the right
