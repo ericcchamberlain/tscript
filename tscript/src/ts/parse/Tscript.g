@@ -138,6 +138,8 @@ unaryExpression
   returns [ Expression lval ]
   : LOGICAL_NOT u=unaryExpression
     { $lval = buildUnaryOperator(loc($start), Unary.LOGICAL_NOT, $u.lval); }
+  | MINUS u=unaryExpression
+    { $lval = buildUnaryOperator(loc($start), Unary.UNARY_MINUS, $u.lval); }
   | l=leftHandSideExpression
     { $lval = $l.lval; }
   ;

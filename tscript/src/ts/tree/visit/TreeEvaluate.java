@@ -109,6 +109,8 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 		else if (unaryOperator.getOp() == Unary.UNARY_MINUS)
 		{
 			//TODO: Implement Unary Minus 
+			//get the value, call toNumber, and inverse the sign
+			child.setValue(TSNumber.create(-(child.getValue().toNumber().getInternal())));
 		}
 		else
 		{
