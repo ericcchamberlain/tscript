@@ -168,7 +168,44 @@ primaryExpression
 
 // fragments to support the lexer rules
 
-fragment DIGIT : [0-9];
+fragment DecimalLiteral
+  : DecimalIntegerLiteral '.' DecimalDigits* ExponentPart?
+  | '.'? DecimalDigits+ ExponentPart?
+  ;
+
+fragment DecimalIntegerLiteral
+  : '0'
+  | NonZeroDigit DecimalDigits?
+  ;
+
+fragment DecimalDigit : [0-9];
+
+fragment DecimalDigits
+  : DecimalDigit+
+  ;
+
+fragment NonZeroDigit : [1-9];
+
+fragment ExponentPart : ExponentIndicator SignedInteger; 
+
+fragment ExponentIndicator : 'e' | 'E';
+
+fragment SignedInteger
+  : DecimalDigits
+  | '+' DecimalDigits
+  | '-' DecimalDigits
+  ;
+
+fragment HexIntegerLiteral
+  : '0x' HexDigit+
+  | '0X' HexDigit+
+  ;
+
+fragment HexDigit
+  : DecimalDigit
+  | [a-f]
+  | [A-F]
+  ;
 
 fragment IdentifierCharacters : [a-zA-Z_$] [a-zA-Z0-9_$]*;
 
@@ -183,11 +220,24 @@ fragment LineTerminator : '\r' '\n' | '\r' | '\n';
 // lexer rules
 //   keywords must appear before IDENTIFIER
 
-NUMERIC_LITERAL : DIGIT+;
-BOOLEAN_LITERAL : 'true' | 'false'; 
-NULL_LITERAL : 'null'; 
-STRING_LITERAL : ["]~["\n\r]*["] | [']~['\n\r]*['];
+NUMERIC_LITERAL
+  : DecimalLiteral
+  | HexIntegerLiteral
+  ;
 
+BOOLEAN_LITERAL 
+  : 'true' 
+  | 'false'
+  ; 
+
+NULL_LITERAL 
+  : 'null'
+  ; 
+
+STRING_LITERAL 
+  : '"' ~["\n\r]* '"'
+  | '\'' ~['\n\r]* '\''
+  ;
 
 LPAREN : [(];
 RPAREN : [)];

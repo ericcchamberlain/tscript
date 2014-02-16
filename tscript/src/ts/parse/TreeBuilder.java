@@ -94,7 +94,16 @@ public class TreeBuilder
 		}
 		catch(NumberFormatException nfe)
 		{
-			Message.bug(loc, "numeric literal not parsable");
+			
+			try 
+			{
+				Integer i = Integer.parseInt(value.substring(2), 16);
+				d = i.doubleValue(); 
+			} 
+			catch (Exception e) {
+				// TODO: handle exception
+				Message.bug(loc, "numeric literal not parsable");
+			}
 		}
 		Message.log("TreeBuilder: NumericLiteral " + d);
 		return new NumericLiteral(loc, d);
