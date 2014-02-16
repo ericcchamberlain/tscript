@@ -71,6 +71,10 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 		{
 			left.setValue(left.getValue().multiply(right.getValue()));
 		}
+		else if (binaryOperator.getOp() == Binop.DIVIDE)
+		{
+			left.setValue(left.getValue().divide(right.getValue()));
+		}
 		else if (binaryOperator.getOp() == Binop.ASSIGN)
 		{
 			left.setValue(left.getValue().simpleAssignment(right.getValue()));

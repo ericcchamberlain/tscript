@@ -49,7 +49,7 @@ public final class TSString extends TSPrimitive
 		return new TSString(value);
 	}
 
-	/** Convert String to Number. Not yet Implemented. */
+	/** Convert String to Number. */
 	public TSNumber toNumber()
 	{
 		// TODO: MAKING ASSUMPTION THAT JAVA AND JAVASCRIPT DO THIS THE SAME WAY. 
@@ -60,7 +60,6 @@ public final class TSString extends TSPrimitive
 			return TSNumber.create(Double.NaN);
 		}
 	}
-
 
 	/** Convert String to String. */
 	public TSString toStr()

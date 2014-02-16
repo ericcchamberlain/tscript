@@ -1,3 +1,16 @@
 var x;
-x = (3 + 4) * 2 + 6 + true + false * 5 * 6;
-print x; 
+print ( x + 5);
+print (x + 5 ) * 4; 
+
+var s;
+s = "hello";
+print s;
+s = "";
+print s;
+s = '';
+print s;
+s = 'bob';
+print s;
+s = s + " mark";
+print s;
+print s - 5;

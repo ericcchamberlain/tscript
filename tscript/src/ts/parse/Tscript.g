@@ -129,6 +129,9 @@ multiplicativeExpression
   | l=multiplicativeExpression ASTERISK r=unaryExpression
     { $lval = buildBinaryOperator(loc($start), Binop.MULTIPLY,
       $l.lval, $r.lval); }
+  | l=multiplicativeExpression DIVIDE r=unaryExpression
+    { $lval = buildBinaryOperator(loc($start), Binop.DIVIDE,
+      $l.lval, $r.lval); }
   ;
 
 unaryExpression
@@ -192,7 +195,7 @@ EQUALITY : [=][=];
 PLUS : [+];
 MINUS : [-];
 ASTERISK : [*];
-DIVIDE : [/];
+DIVIDE : [//];
 LOGICAL_NOT : [!];
 LESS : [<];
 GREATER : [>];

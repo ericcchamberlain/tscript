@@ -98,6 +98,58 @@ public abstract class TSValue
 		TSNumber rightValue = right.toNumber();
 		return TSNumber.create(leftValue.getInternal() * rightValue.getInternal());
 	}
+	
+	/** Perform a division. "this" is the left operand and the right
+	 *  operand is given by the parameter. Both operands are converted
+	 *  to Number before the division.
+	 */
+	public final TSNumber divide(final TSValue right)
+	{
+		TSNumber leftValue = this.toNumber();
+		TSNumber rightValue = right.toNumber();
+		Double lv = new Double(leftValue.getInternal());
+		Double rv = new Double(rightValue.getInternal());
+		
+		try 
+		{
+			//special case: left is -infinity and right is -0, Java break the sign rule
+			if ((leftValue.getInternal() == Double.NEGATIVE_INFINITY) && (rv.compareTo(-0.0d) == 0))
+			{
+				return TSNumber.create(Double.POSITIVE_INFINITY);
+			}
+			//special case: 0 / 0 is NaN
+			else if ((leftValue.getInternal() == 0.0d) && (rightValue.getInternal() == 0.0d))
+			{
+				return TSNumber.create(Double.NaN);
+			}
+			//special case: division of non-zero finite value by zero is signed infinity
+			else if ((!Double.isNaN(leftValue.getInternal())) && (!Double.isInfinite(leftValue.getInternal())) 
+					&& (leftValue.getInternal() != 0.0d) && (rightValue.getInternal() == 0.0d))
+			{
+				if ((lv.compareTo(0.0d) >= 0) && (rv.compareTo(0.0d) >= 0))
+				{
+					return TSNumber.create(Double.POSITIVE_INFINITY);
+				}
+				else if ((lv.compareTo(0.0d) < 0) && (rv.compareTo(0.0d) < 0))
+				{
+					return TSNumber.create(Double.POSITIVE_INFINITY);
+				}
+				else 
+				{
+					return TSNumber.create(Double.NEGATIVE_INFINITY);
+				}
+			}
+			else
+			{
+				return TSNumber.create(leftValue.getInternal() / rightValue.getInternal());
+			}
+		}
+		catch (Exception e)
+		{
+			//special case: ArithmeticException
+			return TSNumber.create(Double.NaN); //THIS SHOULD NEVER HAPPEN 
+		}		
+	}
 
 	/** Perform an addition. "this" is the left operand and the right
 	 *  operand is given by the parameter. Both operands are converted
