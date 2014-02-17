@@ -23,6 +23,7 @@ public final class ExpressionStatement extends Statement
     return exp;
   }
 
+  /** Visit the AST node */
   public <T> T apply(TreeVisitor<T> visitor)
   {
     return visitor.visit(this);

@@ -60,8 +60,26 @@ statement
 
 varStatement
   returns [ Statement lval ]
-  : VAR IDENTIFIER SEMICOLON
-    { $lval = buildVarStatement(loc($start), $IDENTIFIER.text); }
+  : VAR v=variableDeclarationList SEMICOLON
+    { $lval = buildVariableDeclarationList(loc($start), $v.lval); }
+  ;
+
+variableDeclarationList
+  returns [ List<IdentifierInitializerTuple> lval ]
+  : v=variableDeclaration
+    { $lval = new ArrayList<IdentifierInitializerTuple>();
+      $lval.add($v.lval); }
+  | l=variableDeclarationList COMMA r=variableDeclaration
+    { $l.lval.add($r.lval);
+      $lval = $l.lval; }
+  ;
+
+variableDeclaration
+  returns [ IdentifierInitializerTuple lval ]
+  : IDENTIFIER 
+    { $lval = buildIdentifierInitializerTuple(loc($start), $IDENTIFIER.text, null); }
+  | IDENTIFIER ASSIGN r=assignmentExpression
+    { $lval = buildIdentifierInitializerTuple(loc($start), $IDENTIFIER.text, $r.lval); }
   ;
 
 expressionStatement
@@ -170,7 +188,8 @@ primaryExpression
 
 fragment DecimalLiteral
   : DecimalIntegerLiteral '.' DecimalDigits* ExponentPart?
-  | '.'? DecimalDigits+ ExponentPart?
+  | DecimalIntegerLiteral ExponentPart?
+  | '.' DecimalDigits+ ExponentPart?
   ;
 
 fragment DecimalIntegerLiteral
@@ -253,6 +272,7 @@ LESS : [<];
 GREATER : [>];
 LESS_OR_EQUAL : [<][=];
 GREATER_OR_EQUAL : [>][=];
+COMMA : [,];
 
 
 // keywords start here

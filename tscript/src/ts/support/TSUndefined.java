@@ -43,7 +43,9 @@ public final class TSUndefined extends TSPrimitive
 		return TSBoolean.create(false); 
 	}
 
-
+	/** Eqality operator for the undefined type. 
+	 *  @param right  the values being compared to
+	 */
 	public TSBoolean equalsOperator(TSValue right) {
 		if (right instanceof TSUndefined)
 		{
@@ -63,6 +65,10 @@ public final class TSUndefined extends TSPrimitive
 		}
 	}
 	
+	/** Abstract relational comparison for the undefined type.
+	 *  See 11.8.5 of the ECMA specification for algorithm.
+	 *  @param right  the values being compared to
+	 */
 	public TSValue abstractRelationalComparison(final TSValue right)
 	{
 		return this.toNumber().abstractRelationalComparison(right);

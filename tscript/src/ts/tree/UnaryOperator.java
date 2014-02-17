@@ -21,6 +21,7 @@ public class UnaryOperator extends Expression
     this.child = child;
   }
 
+  /** Returns the unary operator */
   public Unary getOp()
   {
     return op;
@@ -32,11 +33,13 @@ public class UnaryOperator extends Expression
     return op.toString();
   }
 
+  /** Returns the unary child expression */
   public Expression getChild()
   {
     return child;
   }
 
+  /** Visit the AST node */
   public <T> T apply(TreeVisitor<T> visitor)
   {
     return visitor.visit(this);

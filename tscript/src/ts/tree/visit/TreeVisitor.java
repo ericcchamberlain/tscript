@@ -29,6 +29,10 @@ public interface TreeVisitor<T>
   T visit(NullLiteral nullLiteral);
 
   T visit(StringLiteral stringLiteral);
+  
+  T visit(VariableDeclarationList variableDeclarationList);
+  
+  T visit(IdentifierInitializerTuple identifierInitializerTuple);
 
 }
 

@@ -23,6 +23,7 @@ public final class StringLiteral extends Expression
     return value;
   }
 
+  /** Visit the AST node */
   public <T> T apply(TreeVisitor<T> visitor)
   {
     return visitor.visit(this);

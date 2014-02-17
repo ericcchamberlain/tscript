@@ -34,16 +34,19 @@ public class BinaryOperator extends Expression
     return op.toString();
   }
 
+  /** Get the left-hand expression */
   public Expression getLeft()
   {
     return left;
   }
 
+  /** Get the right-hand expression */
   public Expression getRight()
   {
     return right;
   }
 
+  /** Visit the AST node */
   public <T> T apply(TreeVisitor<T> visitor)
   {
     return visitor.visit(this);

@@ -62,13 +62,15 @@ public final class TSNumber extends TSPrimitive
 			return TSBoolean.create(true);
 	}
 
-
+	/** Eqality operator for the number type. 
+	 *
+	 */
 	public TSBoolean equalsOperator(final TSValue right)
 	{
 		//if both values are TSNumeber 
 		if (right instanceof TSNumber)
 		{
-			TSNumber tsnRight = right.toNumber();		 //TODO: toNumber?
+			TSNumber tsnRight = right.toNumber();
 			// if left if NaN return false 
 			if (Double.isNaN(this.getInternal()))
 			{
@@ -89,7 +91,6 @@ public final class TSNumber extends TSPrimitive
 			// I believe since +0 and -0 are equal in Java, that these two cases
 			// will be picked up by the previously implemented case
 			// -----------------------------------------------------------------
-			// else return false
 			else 
 			{
 				return TSBoolean.create(false);
@@ -110,7 +111,10 @@ public final class TSNumber extends TSPrimitive
 		}
 	}
 
-
+	/** Abstract relational comparison for the number type.
+	 *  See 11.8.5 of the ECMA Specification
+	 *  @param right  the value being compared to 
+	 */
 	public TSValue abstractRelationalComparison(final TSValue right)
 	{
 		TSNumber ny = right.toNumber();

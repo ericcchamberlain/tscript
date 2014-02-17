@@ -1,5 +1,6 @@
 package ts.parse;
 
+import java.util.List;
 import ts.Location;
 import ts.Message;
 import ts.tree.*;
@@ -122,7 +123,8 @@ public class TreeBuilder
 
         try
         {
-            s = value.substring(1, value.length() - 1); // TODO: CHECK IF THIS WORKS WITH EMPTY STRING 
+            s = value.substring(1, value.length() - 1); // TODO: CHECK IF THIS WORKS WITH EMPTY STRING
+            s = s.replaceAll("\\\\n", "\n");
         }
         catch(Exception e)
         {
@@ -164,6 +166,30 @@ public class TreeBuilder
 		return new NullLiteral(loc);
 	}
 
+	/** Build a VariableDeclarationList. 
+	 *
+	 *  @param  loc   location in source code (file, line, column)
+	 *  @param  value list of IdentifierInitializerTuple
+	 */
+	public static VariableDeclarationList buildVariableDeclarationList(final Location loc,
+			final List<IdentifierInitializerTuple> value)
+	{
+		Message.log("TreeBuilder: VariableDeclarationList");
+		return new VariableDeclarationList(loc, value);
+	}
+	
+	/** Build a IdentifierInitializerTuple. 
+	 *
+	 *  @param  loc   location in source code (file, line, column)
+	 *  @param  identifier the identifier 
+	 *  @param 	expr  the expression to be evaluated 
+	 */
+	public static IdentifierInitializerTuple buildIdentifierInitializerTuple(final Location loc,
+			final String identifier, final Expression expr)
+	{
+		Message.log("TreeBuilder: IdentifierInitializerTuple");
+		return new IdentifierInitializerTuple(loc, identifier, expr);
+	}
 
 	/** Build a print statement.
 	 *

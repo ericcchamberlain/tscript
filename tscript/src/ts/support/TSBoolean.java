@@ -70,6 +70,7 @@ public final class TSBoolean extends TSPrimitive
 			return TSString.create("false");
 	}
 
+	/** Equality comparison operator for the boolean type. */
 	public TSBoolean equalsOperator(TSValue right) {
 		if (right instanceof TSBoolean)
 		{
@@ -89,6 +90,7 @@ public final class TSBoolean extends TSPrimitive
 		}
 	}
 	
+	/** Abstract relational compatison for the boolean type */
 	public TSValue abstractRelationalComparison(final TSValue right)
 	{
 		return this.toNumber().abstractRelationalComparison(right);

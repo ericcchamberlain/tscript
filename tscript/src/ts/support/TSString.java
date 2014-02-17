@@ -79,6 +79,9 @@ public final class TSString extends TSPrimitive
 			return TSBoolean.create(false);
 	}
 
+	/** Eqality operator for the string type. 
+	 *  @param right  the values being compared to
+	 */
 	public TSBoolean equalsOperator(TSValue right) {
 		if (right instanceof TSNumber)
 		{
@@ -105,6 +108,10 @@ public final class TSString extends TSPrimitive
 		}
 	}
 	
+	/** Abstract relational comparison for the string type.
+	 *  See 11.8.5 of the ECMA specification for algorithm.
+	 *  @param right  the values being compared to
+	 */
 	public TSValue abstractRelationalComparison(final TSValue right)
 	{
 		if (right instanceof TSString)

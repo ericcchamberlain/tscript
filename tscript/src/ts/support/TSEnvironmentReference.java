@@ -72,13 +72,17 @@ final class TSEnvironmentReference extends TSReference
 		return;
 	}
 
-
-	// if left is a reference type, get the values and recurse 
-	// THIS SHOULD NEVER ACTUALLY HAPPEN, IN THEORY 
+	/** Eqality operator for the reference type. 
+	 *  If the left is a reference type, get the values
+	 *  and recurse.
+	 *  THIS SHOULD NEVER ACTUALLY HAPPEN (IN THEORY)
+	 *  AS I DEREFERENCE BEFORE THIS METHOD.
+	 */
 	public TSBoolean equalsOperator(TSValue right) {
 		return this.getValue().equalsOperator(right);
 	}
 	
+	/** Absract relational compatison for the reference type */
 	public TSValue abstractRelationalComparison(final TSValue right)
 	{
 		return this.getValue().abstractRelationalComparison(right);

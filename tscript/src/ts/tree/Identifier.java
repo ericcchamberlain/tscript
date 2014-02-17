@@ -23,6 +23,7 @@ public final class Identifier extends Expression
     return name;
   }
 
+  /** Visit the AST node */
   public <T> T apply(TreeVisitor<T> visitor)
   {
     return visitor.visit(this);

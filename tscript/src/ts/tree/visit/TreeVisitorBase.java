@@ -40,7 +40,7 @@ public class TreeVisitorBase<T> implements TreeVisitor<T>
     return null;
   }
 
-    public T visit(final UnaryOperator unaryOperator)
+  public T visit(final UnaryOperator unaryOperator)
   {
     visitNode(unaryOperator.getChild());
     return null;
@@ -87,6 +87,18 @@ public class TreeVisitorBase<T> implements TreeVisitor<T>
   {
 	return null;
   }
+  
+  public T visit(VariableDeclarationList variableDeclarationList) 
+  {
+	return null;
+  }
+  
+  public T visit(IdentifierInitializerTuple identifierInitializerTuple) 
+  {
+	return null;
+  }
+  
+  
 
 }
 

@@ -18,11 +18,13 @@ public final class BooleanLiteral extends Expression
     this.value = value;
   }
 
+  /** Returns the value of the boolean */
   public boolean getValue()
   {
     return value;
   }
 
+  /** Visit the AST node */
   public <T> T apply(TreeVisitor<T> visitor)
   {
     return visitor.visit(this);

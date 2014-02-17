@@ -48,6 +48,11 @@ public abstract class TSValue
 	
 	abstract public TSValue abstractRelationalComparison(final TSValue right);
 
+
+	/** Less-than operator uses the abstract 
+	 *  relational equalty algorith. 
+	 *  @param right  the values being compared to 
+	 */
 	public TSBoolean lessThanOperator(final TSValue right)
 	{
 		TSValue r = this.getValue().toPrimitive().abstractRelationalComparison(right.getValue().toPrimitive());
@@ -61,6 +66,10 @@ public abstract class TSValue
 		}
 	}
 	
+	/** Greater-than operator uses the abstract 
+	 *  relational equalty algorith. 
+	 *  @param right  the values being compared to 
+	 */
 	public TSBoolean greaterThanOperator(final TSValue right)
 	{
 		TSValue r = right.getValue().toPrimitive().abstractRelationalComparison(this.getValue().toPrimitive());

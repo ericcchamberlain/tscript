@@ -39,6 +39,7 @@ public final class TSNull extends TSPrimitive
 		return TSString.create("null");
 	}
 
+	/** Eqality operator for the null type. */
 	public TSBoolean equalsOperator(TSValue right) {
 		if (right instanceof TSNull)
 		{
@@ -58,6 +59,7 @@ public final class TSNull extends TSPrimitive
 		}
 	}
 	
+	/** Abstract relational comparison for the null type. */
 	public TSValue abstractRelationalComparison(final TSValue right)
 	{
 		return this.toNumber().abstractRelationalComparison(right);

@@ -16,8 +16,7 @@ public final class NullLiteral extends Expression
     super(loc);
   }
 
-  //TODO: DO I NEED A getValue() function?
-
+  /** Visit the AST node */
   public <T> T apply(TreeVisitor<T> visitor)
   {
     return visitor.visit(this);

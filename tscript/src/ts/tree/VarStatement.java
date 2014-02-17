@@ -18,11 +18,13 @@ public final class VarStatement extends Statement
     this.name = name;
   }
 
+  /** Return the statement name as string */
   public String getName()
   {
     return name;
   }
 
+  /** Visit the AST node */
   public <T> T apply(TreeVisitor<T> visitor)
   {
     return visitor.visit(this);
