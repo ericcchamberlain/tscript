@@ -180,7 +180,7 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 	}
 	
 	/** Visit the VariableDeclarationList ASTs and evaluate 
-	 *  @param stringLiteral  the StringLiteral to evaluate
+	 *  @param variableDeclarationList  the VariableDeclarationList to evaluate
 	 */
 	public TSCompletion visit(final VariableDeclarationList variableDeclarationList)
 	{
