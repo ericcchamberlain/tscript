@@ -179,6 +179,14 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 				stringLiteral.getValue()));
 	}
 	
+	/** Visit the EmptyStatement ASTs and evaluate 
+	 * 
+	 */
+	public TSCompletion visit(final EmptyStatement emptyStatement)
+	{
+		return TSCompletion.createNormalNull();
+	}
+	
 	/** Visit the VariableDeclarationList ASTs and evaluate 
 	 *  @param variableDeclarationList  the VariableDeclarationList to evaluate
 	 */

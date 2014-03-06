@@ -35,6 +35,16 @@ public class TreeBuilder
 		return new ExpressionStatement(loc, exp);
 	}
 
+	/** Build an empty statement.
+	 *
+	 *  @param  loc  location in source code (file, line, column)
+	 */
+	public static Statement buildEmptyStatement(final Location loc)
+	{
+		Message.log("TreeBuilder: EmptyStatement");
+		return new EmptyStatement(loc);
+	}
+
 	/** Build a binary operator.
 	 *
 	 *  @param  loc   location in source code (file, line, column)

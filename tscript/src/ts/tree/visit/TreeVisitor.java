@@ -33,6 +33,9 @@ public interface TreeVisitor<T>
   T visit(VariableDeclarationList variableDeclarationList);
   
   T visit(IdentifierInitializerTuple identifierInitializerTuple);
+  
+  T visit(EmptyStatement empytStatement);
+
 
 }
 

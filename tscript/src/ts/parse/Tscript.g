@@ -56,7 +56,16 @@ statement
     { $lval = $e.lval; }
   | p=printStatement
     { $lval = $p.lval; }
+   // emptyStatement  
   ;
+    
+/*
+emptyStatement
+  returns [ Statement lval ]
+  : SEMICOLON
+  { $lval = buildEmptyStatement(loc($start)); }
+  ;
+*/
 
 varStatement
   returns [ Statement lval ]
@@ -197,13 +206,13 @@ fragment DecimalIntegerLiteral
   | NonZeroDigit DecimalDigits?
   ;
 
-fragment DecimalDigit : [0-9];
+fragment DecimalDigit : ('0'..'9');
 
 fragment DecimalDigits
   : DecimalDigit+
   ;
 
-fragment NonZeroDigit : [1-9];
+fragment NonZeroDigit : ('1'..'9');
 
 fragment ExponentPart : ExponentIndicator SignedInteger; 
 
@@ -222,17 +231,17 @@ fragment HexIntegerLiteral
 
 fragment HexDigit
   : DecimalDigit
-  | [a-f]
-  | [A-F]
+  | ('a'..'f')
+  | ('A'..'F')
   ;
 
-fragment IdentifierCharacters : [a-zA-Z_$] [a-zA-Z0-9_$]*;
+fragment IdentifierCharacters :  ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '0'..'9' | '_')*;
 
 fragment SpaceTokens : SpaceChars | LineTerminator | EndOfLineComment;
 
 fragment SpaceChars : ' ' | '\t' | '\f';
 
-fragment EndOfLineComment : '//' ( ~[\n\r] )* (LineTerminator | EOF);
+fragment EndOfLineComment : '//' (~('\n' | '\r'))* (LineTerminator | EOF);
 
 fragment LineTerminator : '\r' '\n' | '\r' | '\n';
 
@@ -254,25 +263,25 @@ NULL_LITERAL
   ; 
 
 STRING_LITERAL 
-  : '"' ~["\n\r]* '"'
-  | '\'' ~['\n\r]* '\''
+  : '"' ~('"' | '\n' | '\r')* '"'
+  | '\'' ~('\'' | '\n' | '\r')* '\''
   ;
 
-LPAREN : [(];
-RPAREN : [)];
-SEMICOLON : [;];
-ASSIGN : [=];
-EQUALITY : [=][=];
-PLUS : [+];
-MINUS : [-];
-ASTERISK : [*];
-DIVIDE : [//];
-LOGICAL_NOT : [!];
-LESS : [<];
-GREATER : [>];
-LESS_OR_EQUAL : [<][=];
-GREATER_OR_EQUAL : [>][=];
-COMMA : [,];
+LPAREN : ('(');
+RPAREN : (')');
+SEMICOLON : (';');
+ASSIGN : ('=');
+EQUALITY : ('=')('=');
+PLUS : ('+');
+MINUS : ('-');
+ASTERISK : ('*');
+DIVIDE : ('//');
+LOGICAL_NOT : ('!');
+LESS : ('<');
+GREATER : ('>');
+LESS_OR_EQUAL : ('<')('=');
+GREATER_OR_EQUAL : ('>')('=');
+COMMA : (',');
 
 
 // keywords start here
