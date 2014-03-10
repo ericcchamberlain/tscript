@@ -151,7 +151,11 @@ public final class TreeDump extends TreeVisitorBase<Object>
 		writer.println("IdentifierInitializerTuple");
 		indentation += increment;
 		visitNode(identifierInitializerTuple.getIdentifier());
-		visitNode(identifierInitializerTuple.getExpression()); 
+		// bug found in phase 1, need to check if the expression is null
+		if (identifierInitializerTuple.getExpression() != null) 
+		{
+			visitNode(identifierInitializerTuple.getExpression()); 
+		}
 		indentation -= increment;
 		return null;
 	}

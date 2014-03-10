@@ -56,16 +56,15 @@ statement
     { $lval = $e.lval; }
   | p=printStatement
     { $lval = $p.lval; }
-   // emptyStatement  
+  | q=emptyStatement  
+    { $lval = $q.lval; }
   ;
     
-/*
 emptyStatement
   returns [ Statement lval ]
   : SEMICOLON
   { $lval = buildEmptyStatement(loc($start)); }
   ;
-*/
 
 varStatement
   returns [ Statement lval ]
