@@ -36,6 +36,7 @@ public interface TreeVisitor<T>
   
   T visit(EmptyStatement empytStatement);
 
+  T visit(BlockStatement blockStatement);
 
 }
 

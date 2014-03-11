@@ -201,6 +201,22 @@ public class TreeBuilder
 		return new IdentifierInitializerTuple(loc, identifier, expr);
 	}
 
+
+// buildBlockStatement
+	/** Build a block statement.
+	 *
+	 *  @param  loc  location in source code (file, line, column)
+	 *  @param  sl   an optional statement list.
+	 */
+	public static Statement buildBlockStatement(final Location loc,
+			final List<Statement> sl)
+	{
+		Message.log("TreeBuilder: PrintStatement");
+		return new BlockStatement(loc, sl);
+	}
+
+
+
 	/** Build a print statement.
 	 *
 	 *  @param  loc  location in source code (file, line, column)

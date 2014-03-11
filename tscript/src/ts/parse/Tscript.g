@@ -58,8 +58,18 @@ statement
     { $lval = $p.lval; }
   | q=emptyStatement  
     { $lval = $q.lval; }
+  | b=block
+    { $lval = $b.lval; }
   ;
-    
+
+block
+  returns [ Statement lval ]
+  : LBRACE RBRACE
+    { $lval = buildBlockStatement(loc($start), null); }
+  | LBRACE l=statementList RBRACE
+    { $lval = buildBlockStatement(loc($start), $l.lval); }
+  ;
+
 emptyStatement
   returns [ Statement lval ]
   : SEMICOLON
@@ -268,13 +278,15 @@ STRING_LITERAL
 
 LPAREN : ('(');
 RPAREN : (')');
+LBRACE : ('{');
+RBRACE : ('}');
 SEMICOLON : (';');
 ASSIGN : ('=');
 EQUALITY : ('=')('=');
 PLUS : ('+');
 MINUS : ('-');
 ASTERISK : ('*');
-DIVIDE : ('//');
+DIVIDE : ('/');
 LOGICAL_NOT : ('!');
 LESS : ('<');
 GREATER : ('>');
@@ -292,4 +304,3 @@ IDENTIFIER : IdentifierCharacters;
 // skip whitespace and comments
 
 WhiteSpace : SpaceTokens+ -> skip;
-

@@ -178,6 +178,17 @@ public final class TreeDump extends TreeVisitorBase<Object>
 		writer.println("NullLiteral " + nullLiteral);
 		return null;
 	}
+	
+	// visit the ASTs and dump them in order
+	public Object visit(final BlockStatement blockStatement)
+	{
+		indent();
+		writer.println("BlockStatement");
+		indentation += increment;
+		visitEach((Iterable<Statement>)blockStatement.getStatements());
+		indentation -= increment;
+		return null;
+	}
 
 }
 

@@ -187,6 +187,29 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 		return TSCompletion.createNormalNull();
 	}
 	
+
+	/** Visit the BlockStatement ASTs and evaluate 
+	 * 
+	 */
+	public TSCompletion visit(final BlockStatement blockStatement)
+	{
+		// iterate through the array of statements, visiting each statement
+		// return the completion of the last evaluated statement in the list
+		TSCompletion completion = null;
+		for (Statement statement : blockStatement.getStatements()) {
+			completion = visitNode((Tree) statement);
+		}
+		
+		if (completion == null) 
+		{
+			return TSCompletion.createNormalNull(); 
+		}
+		
+		return completion;
+	}
+
+
+
 	/** Visit the VariableDeclarationList ASTs and evaluate 
 	 *  @param variableDeclarationList  the VariableDeclarationList to evaluate
 	 */
