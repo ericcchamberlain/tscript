@@ -189,6 +189,48 @@ public final class TreeDump extends TreeVisitorBase<Object>
 		indentation -= increment;
 		return null;
 	}
+	
+	// visit the ASTs and dump them in order
+	public Object visit(final IfStatement ifStatement)
+	{
+		indent();
+		writer.println("IfStatement");
+		indentation += increment;
+		visitNode(ifStatement.getIfExpression());
+		visitNode(ifStatement.getIfThenStatement());
+		if (ifStatement.getElseStatement() != null)
+		{
+			visitNode(ifStatement.getElseStatement());
+		}
+		indentation -= increment;
+		return null;
+	}
+	
+	// visit the ASTs and dump them in order
+	public Object visit(final WhileStatement whileStatement)
+	{
+		indent();
+		writer.println("WhileStatement");
+		indentation += increment;
+		visitNode(whileStatement.getExpression());
+		visitNode(whileStatement.getStatement());
+		indentation -= increment;
+		return null;
+	}
+	
+	// visit the ASTs and dump them in order
+	public Object visit(final BreakStatement breakStatement)
+	{
+		indent();
+		writer.println("BreakStatement");
+		indentation += increment;
+		if (breakStatement.getIdentifier() != null)
+		{
+			writer.println("Identifier " + breakStatement.getIdentifier());
+		}
+		indentation -= increment;
+		return null;
+	}
 
 }
 

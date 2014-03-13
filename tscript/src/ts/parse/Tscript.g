@@ -60,6 +60,12 @@ statement
     { $lval = $q.lval; }
   | b=block
     { $lval = $b.lval; }
+  | i=ifStatement
+    { $lval = $i.lval; }
+  | t=iterationStatement
+    { $lval = $t.lval; }
+  | k=breakStatement
+    { $lval = $k.lval; }
   ;
 
 block
@@ -74,6 +80,28 @@ emptyStatement
   returns [ Statement lval ]
   : SEMICOLON
   { $lval = buildEmptyStatement(loc($start)); }
+  ;
+
+ifStatement
+  returns [ Statement lval ]
+  : 'if' LPAREN e=expression RPAREN s1=statement 'else' s2=statement
+    { $lval = buildIfStatement(loc($start), $e.lval, $s1.lval, $s2.lval); }
+  | 'if' LPAREN e=expression RPAREN s1=statement
+    { $lval = buildIfStatement(loc($start), $e.lval, $s1.lval, null); }
+  ;
+
+iterationStatement
+  returns [ Statement lval ]
+  : 'while' LPAREN e=expression RPAREN s=statement
+    { $lval = buildWhileStatement(loc($start), $e.lval, $s.lval); }
+  ;
+
+breakStatement
+  returns [ Statement lval ]
+  : 'break' SEMICOLON
+    { $lval = buildBreakStatement(loc($start), null); }
+  | 'break' i=IDENTIFIER SEMICOLON
+    { $lval = buildBreakStatement(loc($start), $i.text); }
   ;
 
 varStatement
@@ -293,7 +321,6 @@ GREATER : ('>');
 LESS_OR_EQUAL : ('<')('=');
 GREATER_OR_EQUAL : ('>')('=');
 COMMA : (',');
-
 
 // keywords start here
 PRINT : 'print';

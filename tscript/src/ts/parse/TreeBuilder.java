@@ -201,8 +201,6 @@ public class TreeBuilder
 		return new IdentifierInitializerTuple(loc, identifier, expr);
 	}
 
-
-// buildBlockStatement
 	/** Build a block statement.
 	 *
 	 *  @param  loc  location in source code (file, line, column)
@@ -211,11 +209,48 @@ public class TreeBuilder
 	public static Statement buildBlockStatement(final Location loc,
 			final List<Statement> sl)
 	{
-		Message.log("TreeBuilder: PrintStatement");
+		Message.log("TreeBuilder: BlockStatement");
 		return new BlockStatement(loc, sl);
 	}
 
+	/** Build an if / else statement.
+	 *
+	 *  @param  loc  location in source code (file, line, column)
+	 *  @param  e    the boolean if expression to be evaluated.
+	 *  @param	s1	 the statement returned if e is true
+	 *  @param  s2   the statement returned if e is false
+	 */
+	public static Statement buildIfStatement(final Location loc,
+			final Expression e, final Statement s1, final Statement s2)
+	{
+		Message.log("TreeBuilder: IfStatement");
+		return new IfStatement(loc, e, s1, s2);
+	}
 
+	/** Build a while statement.
+	 *
+	 *  @param  loc  location in source code (file, line, column)
+	 *  @param  e    the boolean expression to be evaluated.
+	 *  @param	s	 the statement evaluated if e is true
+	 */
+	public static Statement buildWhileStatement(final Location loc,
+			final Expression e, final Statement s)
+	{
+		Message.log("TreeBuilder: WhileStatement");
+		return new WhileStatement(loc, e, s);
+	}
+
+	/** Build a break statement.
+	 *
+	 *  @param  loc  location in source code (file, line, column)
+	 *  @param  ident the identifier 
+	 */
+	public static Statement buildBreakStatement(final Location loc,
+			final String ident)
+	{
+		Message.log("TreeBuilder: BreakStatement");
+		return new BreakStatement(loc, ident);
+	}
 
 	/** Build a print statement.
 	 *

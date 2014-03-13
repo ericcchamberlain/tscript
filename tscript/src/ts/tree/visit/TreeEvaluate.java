@@ -208,6 +208,70 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 		return completion;
 	}
 
+	/** Visit the IfStatement ASTs and evaluate 
+	 * 
+	 */
+	public TSCompletion visit(final IfStatement ifStatement)
+	{
+		TSCompletion expression = visitNode(ifStatement.getIfExpression()); 
+		if (expression.getValue().toBoolean() == TSBoolean.booleanTrue)
+		{
+			//return the result of expression 1
+			TSCompletion s1 = visitNode(ifStatement.getIfThenStatement());
+			return s1; 
+		}
+		else 
+		{
+			if (ifStatement.getElseStatement() == null)
+			{
+				// if there is no else clause, return (normal, empty, empty)
+				return TSCompletion.createNormalNull();
+			} 
+			else
+			{
+				TSCompletion s2 = visitNode(ifStatement.getElseStatement());
+				return s2; 
+			}
+		}
+	}
+
+	/** Visit the WhileStatement ASTs and evaluate 
+	 * 
+	 */
+	public TSCompletion visit(final WhileStatement whileStatement)
+	{
+		TSValue value = null;
+		TSCompletion stmt = null;
+		TSCompletion exprRef = visitNode(whileStatement.getExpression());
+		while (exprRef.getValue().toBoolean() != TSBoolean.booleanFalse)
+		{
+			stmt = visitNode(whileStatement.getStatement());
+			if (stmt.getValue() != TSNull.value) 
+			{
+				value = stmt.getValue(); 
+			}
+			exprRef = visitNode(whileStatement.getExpression()); 
+		}
+
+		return TSCompletion.createNormal(value);
+	}
+
+	/** Visit the BreakStatement ASTs and evaluate 
+	 * 
+	 */
+	public TSCompletion visit(final BreakStatement breakStatement)
+	{
+		String ident = breakStatement.getIdentifier(); 
+		//case: no identifier 
+		if (ident == null)
+		{
+			return TSCompletion.create(TSCompletionType.Break, null, null);
+		}
+		else  //case: with identifier 
+		{
+			return TSCompletion.create(TSCompletionType.Break, null, TSString.create(ident));
+		}
+	}
 
 
 	/** Visit the VariableDeclarationList ASTs and evaluate 

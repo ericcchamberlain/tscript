@@ -85,27 +85,42 @@ public class TreeVisitorBase<T> implements TreeVisitor<T>
 
   public T visit(NullLiteral nullLiteral) 
   {
-	return null;
+    return null;
   }
   
   public T visit(VariableDeclarationList variableDeclarationList) 
   {
-	return null;
+    return null;
   }
   
   public T visit(IdentifierInitializerTuple identifierInitializerTuple) 
   {
-	return null;
+	 return null;
   }
   
   public T visit(EmptyStatement emptyStatement) 
   {
-	return null;
+	 return null;
   }
 
   public T visit(BlockStatement blockStatement) 
   {
-  return null;
+    return null;
+  }
+
+  public T visit(IfStatement ifStatement) 
+  {
+    return null;
+  }
+
+  public T visit(WhileStatement whileStatement) 
+  {
+    return null;
+  }
+
+  public T visit(BreakStatement breakStatement) 
+  {
+    return null;
   }
 
 }
