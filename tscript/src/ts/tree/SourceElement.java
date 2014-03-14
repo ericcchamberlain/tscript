@@ -7,11 +7,10 @@ import ts.Location;
  * superclass for all AST statement nodes
  *
  */
-public abstract class Statement extends SourceElement
+public abstract class SourceElement extends Node
 {
-  public Statement(final Location loc)
+  public SourceElement(final Location loc)
   {
     super(loc);
   }
 }
-

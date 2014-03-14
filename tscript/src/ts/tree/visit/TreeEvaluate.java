@@ -85,7 +85,7 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 		}
 		else if (binaryOperator.getOp() == Binop.EQUAL)
 		{
-			left.setValue(left.getValue().equalsOperator(right.getValue()));
+			left.setValue(left.getValue().getValue().equalsOperator(right.getValue().getValue()));
 		}
 		else if (binaryOperator.getOp() == Binop.GREATER)
 		{
@@ -193,19 +193,39 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 	 */
 	public TSCompletion visit(final BlockStatement blockStatement)
 	{
-		// iterate through the array of statements, visiting each statement
-		// return the completion of the last evaluated statement in the list
-		TSCompletion completion = null;
-		for (Statement statement : blockStatement.getStatements()) {
-			completion = visitNode((Tree) statement);
-		}
-		
-		if (completion == null) 
+		// case: {  }  empty block
+		if (blockStatement.getStatements() == null)
 		{
 			return TSCompletion.createNormalNull(); 
 		}
-		
-		return completion;
+		// case: { StatementList } 
+		else 
+		{
+			// iterate through the array of statements, visiting each statement
+			// return the completion of the last evaluated statement in the list
+			TSCompletion completion = null;
+			TSValue value = null; 
+			for (Statement statement : blockStatement.getStatements()) {
+				completion = visitNode((Tree) statement);
+				// if completion is an abrupt completion, return completion 
+				if (!completion.isNormal())
+				{
+					return completion;
+				}
+				//If s.value is empty, let V = sl.value, otherwise let V = s.value.
+				// Return (s.type, V, s.target).
+				if (completion.getValue() != null) 
+				{
+					value = completion.getValue(); 
+				}
+			}
+			TSString target = null;
+			if (completion.getTarget() != null)
+			{
+				target = completion.getTarget().toStr();
+			}
+			return TSCompletion.create(completion.getType(), value, target); 
+		}
 	}
 
 	/** Visit the IfStatement ASTs and evaluate 
@@ -246,13 +266,23 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 		while (exprRef.getValue().toBoolean() != TSBoolean.booleanFalse)
 		{
 			stmt = visitNode(whileStatement.getStatement());
-			if (stmt.getValue() != TSNull.value) 
+			if (stmt.getValue() != null) 
 			{
 				value = stmt.getValue(); 
 			}
+			if (stmt.getType() != TSCompletionType.Continue )  //TODO: This is not up to spec !!!
+			{
+				if (stmt.getType() == TSCompletionType.Break)  //TODO: This is not up to spec !!!
+				{
+					return TSCompletion.createNormal(value); 
+				}
+				if (!stmt.isNormal()) 
+				{
+					return stmt; 
+				}
+			}
 			exprRef = visitNode(whileStatement.getExpression()); 
 		}
-
 		return TSCompletion.createNormal(value);
 	}
 
@@ -270,6 +300,23 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 		else  //case: with identifier 
 		{
 			return TSCompletion.create(TSCompletionType.Break, null, TSString.create(ident));
+		}
+	}
+	
+	/** Visit the ContinueStatement ASTs and evaluate 
+	 * 
+	 */
+	public TSCompletion visit(final ContinueStatement continueStatement)
+	{
+		String ident = continueStatement.getIdentifier(); 
+		//case: no identifier 
+		if (ident == null)
+		{
+			return TSCompletion.create(TSCompletionType.Continue, null, null);
+		}
+		else  //case: with identifier 
+		{
+			return TSCompletion.create(TSCompletionType.Continue, null, TSString.create(ident));
 		}
 	}
 

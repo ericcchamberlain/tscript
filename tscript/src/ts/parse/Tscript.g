@@ -22,11 +22,11 @@ grammar Tscript;
       token.getCharPositionInLine());
   }
 
-  // a program is a list of statements
+  // a program is a list of SourceElement
   // i.e. root of AST is stored here
   // set by the action for the start symbol
-  private List<Statement> semanticValue;
-  public List<Statement> getSemanticValue()
+  private List<SourceElement> semanticValue;
+  public List<SourceElement> getSemanticValue()
   {
     return semanticValue;
   }
@@ -35,37 +35,64 @@ grammar Tscript;
 // grammar proper
 
 program
-  : sl=statementList EOF
-    { semanticValue = $sl.lval; }
+  : s=sourceElements EOF
+    { semanticValue = $s.lval; }
+  ;
+
+sourceElements
+  returns [ List<SourceElement> lval ]
+  : s=sourceElement
+    { $lval = new ArrayList<SourceElement>(); 
+      $lval.add($s.lval);
+    }
+  | s1=sourceElements s2=sourceElement
+    { $s1.lval.add($s2.lval);
+      $lval = $s1.lval;
+    }
+  ;
+
+sourceElement
+  returns [ SourceElement lval ]
+  : s=statement
+    { $lval = $s.lval; }
+  /* NEEDED FOR FUNCTIONS 
+  | f=functionDeclaration
+    { $lval = $f.lval; }
+  */
   ;
 
 statementList
   returns [ List<Statement> lval ]
-  : // empty rule
-    { $lval = new ArrayList<Statement>(); }
+  : s=statement
+    { $lval = new ArrayList<Statement>();
+      $lval.add($s.lval); 
+    }
   | sl=statementList s=statement
     { $sl.lval.add($s.lval);
-      $lval = $sl.lval; }
+      $lval = $sl.lval; 
+    }
   ;
 
 statement
   returns [ Statement lval ]
-  : v=varStatement
+  : b=block
+    { $lval = $b.lval; }
+  | v=varStatement
     { $lval = $v.lval; }
-  | e=expressionStatement
-    { $lval = $e.lval; }
-  | p=printStatement
-    { $lval = $p.lval; }
   | q=emptyStatement  
     { $lval = $q.lval; }
-  | b=block
-    { $lval = $b.lval; }
+  | e=expressionStatement
+    { $lval = $e.lval; }
   | i=ifStatement
     { $lval = $i.lval; }
   | t=iterationStatement
     { $lval = $t.lval; }
+  | c=continueStatement
+    { $lval = $c.lval; }
   | k=breakStatement
     { $lval = $k.lval; }
+  | p=printStatement
+    { $lval = $p.lval; }
   ;
 
 block
@@ -102,6 +129,14 @@ breakStatement
     { $lval = buildBreakStatement(loc($start), null); }
   | 'break' i=IDENTIFIER SEMICOLON
     { $lval = buildBreakStatement(loc($start), $i.text); }
+  ;
+
+continueStatement
+  returns [ Statement lval ]
+  : 'continue' SEMICOLON
+    { $lval = buildContinueStatement(loc($start), null); }
+  | 'continue' i=IDENTIFIER SEMICOLON
+    { $lval = buildContinueStatement(loc($start), $i.text); }
   ;
 
 varStatement

@@ -44,6 +44,7 @@ public interface TreeVisitor<T>
 
   T visit(BreakStatement breakStatement);
 
-
+  T visit(ContinueStatement continueStatement);
+  
 }
 

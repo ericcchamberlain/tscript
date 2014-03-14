@@ -252,6 +252,18 @@ public class TreeBuilder
 		return new BreakStatement(loc, ident);
 	}
 
+	/** Build a continue statement.
+	 *
+	 *  @param  loc  location in source code (file, line, column)
+	 *  @param  ident the identifier 
+	 */
+	public static Statement buildContinueStatement(final Location loc,
+			final String ident)
+	{
+		Message.log("TreeBuilder: BreakStatement");
+		return new ContinueStatement(loc, ident);
+	}
+
 	/** Build a print statement.
 	 *
 	 *  @param  loc  location in source code (file, line, column)
