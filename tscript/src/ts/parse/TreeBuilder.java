@@ -264,6 +264,19 @@ public class TreeBuilder
 		return new ContinueStatement(loc, ident);
 	}
 
+	/** Build a labelled statement.
+	 *
+	 *  @param  loc  location in source code (file, line, column)
+	 *  @param  i 	the identifier 
+	 *  @param	s 	the statement
+	 */
+	public static Statement buildLabelledStatement(final Location loc,
+			final String i, final Statement s)
+	{
+		Message.log("TreeBuilder: LabelledStatement");
+		return new LabelledStatement(loc, i, s);
+	}
+
 	/** Build a print statement.
 	 *
 	 *  @param  loc  location in source code (file, line, column)

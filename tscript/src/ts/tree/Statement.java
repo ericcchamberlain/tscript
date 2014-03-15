@@ -1,6 +1,8 @@
 
 package ts.tree;
 
+import java.util.ArrayList;
+
 import ts.Location;
 
 /**
@@ -9,9 +11,18 @@ import ts.Location;
  */
 public abstract class Statement extends SourceElement
 {
-  public Statement(final Location loc)
-  {
-    super(loc);
-  }
+
+	public ArrayList<String> labels = new ArrayList<>(); 
+
+ 	public Statement(final Location loc)
+	{
+	    super(loc);
+	}
+
+	public void addLabel(final String label)
+	{
+		labels.add(label);
+	}
+
 }
 

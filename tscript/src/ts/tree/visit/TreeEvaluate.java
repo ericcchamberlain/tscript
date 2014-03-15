@@ -260,25 +260,52 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 	 */
 	public TSCompletion visit(final WhileStatement whileStatement)
 	{
+		// Let V = empty.
 		TSValue value = null;
 		TSCompletion stmt = null;
+		// Repeat.
+		// Let exprRef be the result of evaluating Expression.
 		TSCompletion exprRef = visitNode(whileStatement.getExpression());
+		// If ToBoolean(GetValue(exprRef)) is false, return (normal, V, empty).
 		while (exprRef.getValue().toBoolean() != TSBoolean.booleanFalse)
 		{
+			// Let stmt be the result of evaluating Statement.
 			stmt = visitNode(whileStatement.getStatement());
+			// If stmt.value is not empty, let V = stmt.value.
 			if (stmt.getValue() != null) 
 			{
 				value = stmt.getValue(); 
 			}
-			if (stmt.getType() != TSCompletionType.Continue )  //TODO: This is not up to spec !!!
+			//If stmt.type is not continue || stmt.target is not in the current label set, then
+			if ((stmt.getType() != TSCompletionType.Continue) 
+					|| ((stmt.getTarget() != null) && !(whileStatement.labels.contains(((TSString)stmt.getTarget()).getInternal()))))
 			{
-				if (stmt.getType() == TSCompletionType.Break)  //TODO: This is not up to spec !!!
+				// case: stmt.type is break   
+				if (stmt.getType() == TSCompletionType.Break) 
 				{
-					return TSCompletion.createNormal(value); 
+					// case: target is null
+					if (stmt.getTarget() == null)
+					{
+						return TSCompletion.createNormal(value); 
+					}
+					// case: target is not null, so check if it is in the label set
+					else if (whileStatement.labels.contains(((TSString) stmt.getTarget()).getInternal()))
+					{
+						// return normal if it is in the label set 
+						return TSCompletion.createNormal(value); 
+					}
+					else 
+					{
+						// else return the abnormal completion type 
+						return stmt; 
+					}
 				}
-				if (!stmt.isNormal()) 
+				else // case: handle normal and abrupt completion
 				{
-					return stmt; 
+					if (!stmt.isNormal())
+					{
+						return stmt; // TODO: THIS IS NOT UP TO SPEC. !!! !!! !!! 
+					}
 				}
 			}
 			exprRef = visitNode(whileStatement.getExpression()); 
@@ -320,7 +347,34 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 		}
 	}
 
-
+	/** Visit the LabelledStatement ASTs and evaluate 
+	 *  12.12 Labelled Statements
+	 */
+	public TSCompletion visit(final LabelledStatement labelledStatement)
+	{
+		// add the label to the statement before evaluation 
+		String label = labelledStatement.getIdentifierName();
+		Statement statement = labelledStatement.getStatement();
+		statement.addLabel(label);
+		// if the labelled statement itself is not empty label set, add
+		// these labels to the statement before evaluating 
+		if (!labelledStatement.labels.isEmpty())
+		{
+			statement.labels.addAll(labelledStatement.labels);
+		}
+		// evaluate the statement 
+		// If the result of evaluating Statement is (break, V, L) where
+		// L is equal to Identifier, the production results in (normal, V, empty).
+		TSCompletion completion = visitNode(statement);
+		if ((completion.getType() == TSCompletionType.Break)
+				&& (((TSString)completion.getTarget()).getInternal().equals(TSString.create(labelledStatement.getIdentifierName()).getInternal()))) // Does this actually work ???
+		{
+			return TSCompletion.createNormal(completion.getValue());
+		}
+		return completion;  //   <--- The spec is a little unclear hear what to return if not a match
+	}
+	
+	
 	/** Visit the VariableDeclarationList ASTs and evaluate 
 	 *  @param variableDeclarationList  the VariableDeclarationList to evaluate
 	 */

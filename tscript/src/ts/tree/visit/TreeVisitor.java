@@ -46,5 +46,7 @@ public interface TreeVisitor<T>
 
   T visit(ContinueStatement continueStatement);
   
+  T visit(LabelledStatement labelledStatement);
+
 }
 

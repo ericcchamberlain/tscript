@@ -61,6 +61,31 @@ sourceElement
   */
   ;
 
+/*
+FunctionExpression :
+function Identifieropt ( FormalParameterListopt ) { FunctionBody }
+FormalParameterList :
+Identifier
+FormalParameterList , Identifier
+FunctionBody :
+SourceElementsopt
+*/
+
+/*
+functionExpression :
+  returns [ Expression lval ]
+  : 'function' '(' FormalParameterListopt ')' '{' FunctionBody '}'
+    { }
+  | 'function' IDENTIFIER '(' FormalParameterListopt ')' '{' FunctionBody '}'
+    { }
+  ;
+
+formalParameterList :
+
+Identifier
+FormalParameterList , Identifier
+*/
+
 statementList
   returns [ List<Statement> lval ]
   : s=statement
@@ -91,6 +116,8 @@ statement
     { $lval = $c.lval; }
   | k=breakStatement
     { $lval = $k.lval; }
+  | l=labelledStatement
+    { $lval = $l.lval; }
   | p=printStatement
     { $lval = $p.lval; }
   ;
@@ -138,6 +165,12 @@ continueStatement
   | 'continue' i=IDENTIFIER SEMICOLON
     { $lval = buildContinueStatement(loc($start), $i.text); }
   ;
+
+labelledStatement
+  returns [ Statement lval ]
+  : i=IDENTIFIER COLON s=statement
+    { $lval = buildLabelledStatement(loc($start), $i.text, $s.lval); }
+  ; 
 
 varStatement
   returns [ Statement lval ]
@@ -356,6 +389,7 @@ GREATER : ('>');
 LESS_OR_EQUAL : ('<')('=');
 GREATER_OR_EQUAL : ('>')('=');
 COMMA : (',');
+COLON : (':');
 
 // keywords start here
 PRINT : 'print';
