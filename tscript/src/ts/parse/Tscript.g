@@ -35,7 +35,9 @@ grammar Tscript;
 // grammar proper
 
 program
-  : s=sourceElements EOF
+  :  // empty program 
+    {semanticValue = new ArrayList<SourceElement>(); }
+  | s=sourceElements EOF
     { semanticValue = $s.lval; }
   ;
 
@@ -55,7 +57,9 @@ sourceElement
   returns [ SourceElement lval ]
   : s=statement
     { $lval = $s.lval; }
-  /* NEEDED FOR FUNCTIONS 
+  /* NEEDED FOR FUNCTIONS. 
+    When I enable this, I need to change all the places I used
+    sourceElement casting to (statement) and replaec with instanceOf ... 
   | f=functionDeclaration
     { $lval = $f.lval; }
   */
@@ -71,20 +75,40 @@ FunctionBody :
 SourceElementsopt
 */
 
-/*
-functionExpression :
+
+functionExpression
   returns [ Expression lval ]
-  : 'function' '(' FormalParameterListopt ')' '{' FunctionBody '}'
-    { }
-  | 'function' IDENTIFIER '(' FormalParameterListopt ')' '{' FunctionBody '}'
-    { }
+  : 'function' '(' ')' '{' f=functionBody '}'
+    { $lval = buildFunctionExpression(loc($start), null, null, $f.lval); }
+  | 'function' i=IDENTIFIER '(' ')' '{' f=functionBody '}'
+    { $lval = buildFunctionExpression(loc($start), $i.text, null, $f.lval); }
+  | 'function' '(' fp=formalParameterList ')' '{' f=functionBody '}'
+    { $lval = buildFunctionExpression(loc($start), null, $fp.lval, $f.lval); }
+  | 'function' i=IDENTIFIER '(' fp=formalParameterList ')' '{' f=functionBody '}'
+    { $lval = buildFunctionExpression(loc($start), $i.text, $fp.lval, $f.lval); }
   ;
 
-formalParameterList :
 
-Identifier
-FormalParameterList , Identifier
-*/
+formalParameterList
+  returns [ List<String> lval ]
+  : i=IDENTIFIER
+    { $lval = new ArrayList<String>();
+      $lval.add($i.text); 
+    }
+  | f=formalParameterList ',' i=IDENTIFIER
+    { $f.lval.add($i.text); 
+      $lval = $f.lval; 
+    }
+  ;
+
+functionBody
+  returns [ List<SourceElement> lval ]  // WHAT DO I RETURN HERE ?
+  : // empty
+    { $lval = new ArrayList<SourceElement>(); }
+  | s=sourceElements
+    { $lval = $s.lval; }
+  ;
+
 
 statementList
   returns [ List<Statement> lval ]
@@ -278,9 +302,64 @@ unaryExpression
 
 leftHandSideExpression
   returns [ Expression lval ]
+  : n=newExpression
+    { $lval = $n.lval; }
+  | c=callExpression
+    { $lval = $c.lval; }
+  ;
+
+memberExpression
+  returns [ Expression lval ]
   : p=primaryExpression
     { $lval = $p.lval; }
+  | f=functionExpression
+    { $lval = $f.lval; }
+  /*
+  MemberExpression [ Expression ]
+  MemberExpression . IdentifierName
+  new MemberExpression Arguments
+  */
   ;
+
+callExpression
+  returns [ Expression lval ]
+  : m=memberExpression a=arguments
+    {  }
+  | c=callExpression a=arguments
+    {  }
+  /*
+  CallExpression [ Expression ]
+  CallExpression . IdentifierName
+  */
+ ;
+
+arguments
+  returns [ List<Expression> lval ]
+  : '(' ')'
+    { $lval = new ArrayList<Expression>(); }
+  | '(' al=argumentList ')'
+    { $lval = $al.lval; }
+  ;
+
+argumentList
+  returns [ List<Expression> lval ]
+  : a=assignmentExpression
+    { $lval = new ArrayList<Expression>();
+      $lval.add($a.lval); 
+    }
+  | al=argumentList ',' ae=assignmentExpression
+    { $al.lval.add($ae.lval);
+      $lval = $al.lval; 
+    }
+  ;
+
+newExpression
+  returns [ Expression lval ]
+  : m=memberExpression
+    { $lval = $m.lval; }
+// new newExpression
+  ;
+
 
 primaryExpression
   returns [ Expression lval ]

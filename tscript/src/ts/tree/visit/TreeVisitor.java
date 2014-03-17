@@ -48,5 +48,7 @@ public interface TreeVisitor<T>
   
   T visit(LabelledStatement labelledStatement);
 
+  T visit(FunctionExpression functionExpression);
+
 }
 

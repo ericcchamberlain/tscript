@@ -416,6 +416,14 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 	{
 		return TSCompletion.createNormal(TSNull.value); // TODO: CHECK WITH PROFESSOR
 	}
+	
+	/** Visit the FunctionObject ASTs and evaluate 
+	 *  @param functionObject  the function object to evaluate
+	 */
+	public TSCompletion visit(final FunctionObject functionObject)
+	{
+		return TSCompletion.createNormal(TSNull.value); // TODO: CHECK WITH PROFESSOR
+	}
 
 	/** Visit the PrintStatement ASTs and evaluate 
 	 *  @param printStatement  the PrintStatement to evaluate

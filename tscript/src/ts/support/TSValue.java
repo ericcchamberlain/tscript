@@ -216,5 +216,13 @@ public abstract class TSValue
 		return false;
 	}
 
+	/** Returns true is function is callable 
+	 * 
+	 */
+	public boolean isCallable()
+	{
+		return false; 
+	}
+
 }
 

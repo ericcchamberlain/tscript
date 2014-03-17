@@ -167,12 +167,27 @@ public class TreeBuilder
 		return new BooleanLiteral(loc, b);
 	}
 
+
+	/** Build a function expression.
+	 *
+	 *  @param  loc   location in source code (file, line, column)
+	 *  @param  value 
+	 */
+	public static Expression buildFunctionExpression(final Location loc,
+			final String ident, List<String> parameters, List<SourceElement> body)
+	{
+		
+		Message.log("TreeBuilder: FunctionExpression");
+		return new FunctionExpression(loc, ident, parameters, body);
+	}
+
 	/** Build a null literal expression. 
 	 *
 	 *  @param  loc   location in source code (file, line, column)
 	 */
 	public static Expression buildNullLiteral(final Location loc)
 	{
+		Message.log("TreeBuilder: NullLiteral");
 		return new NullLiteral(loc);
 	}
 
