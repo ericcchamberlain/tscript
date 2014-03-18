@@ -418,11 +418,26 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 	}
 	
 	/** Visit the FunctionObject ASTs and evaluate 
-	 *  @param functionObject  the function object to evaluate
+	 *  @param functionExpression  the function expression to evaluate
 	 */
-	public TSCompletion visit(final FunctionObject functionObject)
+	public TSCompletion visit(final FunctionExpression functionExpression)
 	{
-		return TSCompletion.createNormal(TSNull.value); // TODO: CHECK WITH PROFESSOR
+		// case: no identifier 
+		if (functionExpression.getIdentifierName() == null)
+		{
+			TSFunctionObject fo = new TSFunctionObject(environment, functionExpression.getFormalParameters(),
+					functionExpression.getFunctionBody());
+			return TSCompletion.createNormal(fo);
+		}
+		// case: identifier
+		else
+		{
+			TSLexicalEnvironment funcEnv = TSLexicalEnvironment.newDeclarativeEnvironment(environment); 
+			TSFunctionObject closure = new TSFunctionObject(funcEnv, functionExpression.getFormalParameters(),
+					functionExpression.getFunctionBody());
+			funcEnv.declareFunctionName(functionExpression.getIdentifierName(), closure);
+			return TSCompletion.createNormal(closure);
+		}
 	}
 
 	/** Visit the PrintStatement ASTs and evaluate 
@@ -448,6 +463,67 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 		environment.declareVariable(TSString.create(varStatement.getName()), false);
 		return TSCompletion.createNormalNull();
 	}
+	
+
+	public TSCompletion visit(final ReturnStatement returnStatement)
+	{
+		if (returnStatement.getExpression() == null)
+		{
+			return TSCompletion.create(TSCompletionType.Return, TSUndefined.value, null);
+		}
+		else 
+		{
+			TSValue exprValue = visitNode(returnStatement.getExpression()).getValue();
+			return TSCompletion.create(TSCompletionType.Return, exprValue, null);
+		}
+	}
+
+	public TSCompletion visit(final CallExpression callExpression)
+	{
+		Expression expression = callExpression.getExpression();
+		TSFunctionObject funcObj = null;
+		//check if an object 
+		TSValue exprValue = visitNode(expression).getValue();
+		if (exprValue instanceof TSObject && exprValue.isCallable() )
+		{
+			funcObj= (TSFunctionObject) exprValue;
+		} 
+		else 
+		{
+			return TSCompletion.create(TSCompletionType.Throw, TSString.create("Type Error"), null);
+		}
+		
+		List<Expression> arguments = callExpression.getArguments();
+		List<TSValue> argValues = new ArrayList<TSValue>();
+		for (Expression expr : arguments) {
+			argValues.add(visitNode(expr).getValue().getValue());
+		}
+		
+		TSLexicalEnvironment originalEnvironment = environment;
+		environment = TSLexicalEnvironment.newDeclarativeEnvironment(funcObj.getScope());
+		List<String> parameters = funcObj.getNames();
+		
+		for (int i = 0; i < parameters.size(); i++) {
+			environment.declareParameter(parameters.get(i), argValues.get(i));
+		}
+		
+		List<SourceElement> se = funcObj.getCode();
+		TSCompletion returnValue = TSCompletion.createNormal(TSUndefined.value); 
+		for (SourceElement sourceElement : se) {
+			returnValue = visitNode(sourceElement); 
+			if (returnValue.getType() == TSCompletionType.Throw){
+				environment = originalEnvironment; 
+				return returnValue; 
+			}
+			if (returnValue.getType() == TSCompletionType.Return){
+				environment = originalEnvironment; 
+				return TSCompletion.createNormal(returnValue.getValue());
+			}
+		}
+		environment = originalEnvironment; 
+		return returnValue; 
+	}
+
 
 }
 

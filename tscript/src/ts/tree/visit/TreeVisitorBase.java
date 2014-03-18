@@ -138,5 +138,16 @@ public class TreeVisitorBase<T> implements TreeVisitor<T>
 	  return null;
   }
 
+  public T visit(CallExpression callExpression)
+  {
+	  return null;
+  }
+
+	public T visit(ReturnStatement returnStatement) 
+	{
+		return null;
+	}
+
+  
 }
 

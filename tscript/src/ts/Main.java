@@ -204,7 +204,11 @@ public class Main
         TSCompletion completion = t.apply(treeEval);
         if (!completion.isNormal())
         {
-          Message.fatal("evaluation completed abnormally!");
+        	if (completion.getType() == TSCompletionType.Throw) 
+        	{
+        		Message.evaluationError(completion.getValue().toStr().getInternal());
+        	}
+        	Message.fatal("evaluation completed abnormally!");
         }
       }
     }

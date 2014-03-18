@@ -140,8 +140,6 @@ statement
     { $lval = $c.lval; }
   | k=breakStatement
     { $lval = $k.lval; }
-  | r=returnStatement
-    { $lval = $r.lval; }
   | l=labelledStatement
     { $lval = $l.lval; }
   | p=printStatement
@@ -208,7 +206,7 @@ returnStatement
   returns [ Statement lval ]
   : 'return' SEMICOLON
     { $lval = buildReturnStatement(loc($start), null); }
-  | 'return' e=expression SEMICOLON
+  | 'return' e=Expression SEMICOLON
     {$lval = buildReturnStatement(loc($start), $e.lval); }
   ;
 
@@ -331,14 +329,6 @@ memberExpression
   */
   ;
 
-
-newExpression
-  returns [ Expression lval ]
-  : m=memberExpression
-    { $lval = $m.lval; }
-// new newExpression
-  ;
-
 callExpression
   returns [ Expression lval ]
   : m=memberExpression a=arguments
@@ -346,7 +336,6 @@ callExpression
   /*
   | c=callExpression a=arguments
     { $lval = buildCallExpression(loc($start), $m.lval, $a.lval); }
-  /*
   CallExpression [ Expression ]
   CallExpression . IdentifierName
   */
@@ -372,6 +361,12 @@ argumentList
     }
   ;
 
+newExpression
+  returns [ Expression lval ]
+  : m=memberExpression
+    { $lval = $m.lval; }
+// new newExpression
+  ;
 
 
 primaryExpression

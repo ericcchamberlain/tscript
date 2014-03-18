@@ -50,5 +50,10 @@ public interface TreeVisitor<T>
 
   T visit(FunctionExpression functionExpression);
 
+  T visit(CallExpression callExpression);
+
+  T visit(ReturnStatement returnStatement);
+
+
 }
 

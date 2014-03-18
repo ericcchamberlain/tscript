@@ -171,7 +171,6 @@ public class TreeBuilder
 	/** Build a function expression.
 	 *
 	 *  @param  loc   location in source code (file, line, column)
-	 *  @param  value 
 	 */
 	public static Expression buildFunctionExpression(final Location loc,
 			final String ident, List<String> parameters, List<SourceElement> body)
@@ -302,6 +301,22 @@ public class TreeBuilder
 	{
 		Message.log("TreeBuilder: PrintStatement");
 		return new PrintStatement(loc, exp);
+	}
+
+
+
+	public static Expression buildCallExpression(final Location loc,
+			final Expression expr, final List<Expression> args)
+	{
+		Message.log("TreeBuilder: CallExpression");
+		return new CallExpression(loc, expr, args);
+	}
+
+	public static Statement buildReturnStatement(final Location loc,
+			final Expression expr)
+	{
+		Message.log("TreeBuilder: ReturnStatement");
+		return new ReturnStatement(loc, expr);
 	}
 
 
