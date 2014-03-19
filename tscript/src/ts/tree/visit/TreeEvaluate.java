@@ -483,7 +483,7 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 		Expression expression = callExpression.getExpression();
 		TSFunctionObject funcObj = null;
 		//check if an object 
-		TSValue exprValue = visitNode(expression).getValue();
+		TSValue exprValue = visitNode(expression).getValue().getValue();
 		if (exprValue instanceof TSObject && exprValue.isCallable() )
 		{
 			funcObj= (TSFunctionObject) exprValue;

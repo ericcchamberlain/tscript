@@ -65,29 +65,17 @@ sourceElement
   */
   ;
 
-/*
-FunctionExpression :
-function Identifieropt ( FormalParameterListopt ) { FunctionBody }
-FormalParameterList :
-Identifier
-FormalParameterList , Identifier
-FunctionBody :
-SourceElementsopt
-*/
-
-
 functionExpression
   returns [ Expression lval ]
-  : 'function' '(' ')' '{' f=functionBody '}'
+  : FUNCTION LPAREN RPAREN LBRACE f=functionBody RBRACE
     { $lval = buildFunctionExpression(loc($start), null, null, $f.lval); }
-  | 'function' i=IDENTIFIER '(' ')' '{' f=functionBody '}'
+  | FUNCTION i=IDENTIFIER LPAREN RPAREN LBRACE f=functionBody RBRACE
     { $lval = buildFunctionExpression(loc($start), $i.text, null, $f.lval); }
-  | 'function' '(' fp=formalParameterList ')' '{' f=functionBody '}'
+  | FUNCTION LPAREN fp=formalParameterList RPAREN LBRACE f=functionBody RBRACE
     { $lval = buildFunctionExpression(loc($start), null, $fp.lval, $f.lval); }
-  | 'function' i=IDENTIFIER '(' fp=formalParameterList ')' '{' f=functionBody '}'
+  | FUNCTION i=IDENTIFIER LPAREN fp=formalParameterList RPAREN LBRACE f=functionBody RBRACE
     { $lval = buildFunctionExpression(loc($start), $i.text, $fp.lval, $f.lval); }
   ;
-
 
 formalParameterList
   returns [ List<String> lval ]
@@ -95,7 +83,7 @@ formalParameterList
     { $lval = new ArrayList<String>();
       $lval.add($i.text); 
     }
-  | f=formalParameterList ',' i=IDENTIFIER
+  | f=formalParameterList COMMA i=IDENTIFIER
     { $f.lval.add($i.text); 
       $lval = $f.lval; 
     }
@@ -354,9 +342,9 @@ callExpression
 
 arguments
   returns [ List<Expression> lval ]
-  : '(' ')'
+  : LPAREN RPAREN
     { $lval = new ArrayList<Expression>(); }
-  | '(' al=argumentList ')'
+  | LPAREN al=argumentList RPAREN
     { $lval = $al.lval; }
   ;
 
@@ -366,7 +354,7 @@ argumentList
     { $lval = new ArrayList<Expression>();
       $lval.add($a.lval); 
     }
-  | al=argumentList ',' ae=assignmentExpression
+  | al=argumentList COMMA ae=assignmentExpression
     { $al.lval.add($ae.lval);
       $lval = $al.lval; 
     }
@@ -486,6 +474,7 @@ COLON : (':');
 // keywords start here
 PRINT : 'print';
 VAR : 'var';
+FUNCTION : 'function';
 
 IDENTIFIER : IdentifierCharacters;
 

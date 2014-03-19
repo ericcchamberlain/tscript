@@ -64,7 +64,7 @@ cd ..
 
 # test phase2 sample tests 
 cd phase2
-for prog in p1 p2 p3 p4 p5 p5a p6 p6a p7 p8 p9
+for prog in p1 p2 p3 p4 p5 p5a p6 p6a p7 p8 p9 p10
 do
   ../../build/bin/ts $prog.ts >&$prog.out
   cmp $prog.out results/$prog.out

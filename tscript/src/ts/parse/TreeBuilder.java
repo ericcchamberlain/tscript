@@ -274,7 +274,7 @@ public class TreeBuilder
 	public static Statement buildContinueStatement(final Location loc,
 			final String ident)
 	{
-		Message.log("TreeBuilder: BreakStatement");
+		Message.log("TreeBuilder: ContinueStatement");
 		return new ContinueStatement(loc, ident);
 	}
 
