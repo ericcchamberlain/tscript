@@ -8,6 +8,8 @@ import ts.support.*;
 import java.util.List;
 import java.util.ArrayList;
 
+import org.xml.sax.ext.LexicalHandler;
+
 /**
  * Evaluate an AST. Parameterized by the "completion" type.
  * <p>
@@ -542,6 +544,41 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 		//restore the original lexical environment 
 		environment = originalEnvironment; 
 		return returnValue; 
+	}
+
+	/** Visit the TryStatement ASTs and evaluate 
+	 * 
+	 */
+	public TSCompletion visit(final TryStatement tryStatement)
+	{		
+		//Let B be the result of evaluating Block.
+		TSCompletion b = visitNode(tryStatement.getTryBlock());
+		if (b.getType() != TSCompletionType.Throw)
+		{
+			return b;
+		}
+		else
+		{
+			//Let oldEnv be the running execution contexts LexicalEnvironment.
+			TSLexicalEnvironment oldEnv = environment;
+			//Let catchEnv be the result of calling NewDeclarativeEnvironment passing oldEnv as the argument.
+			TSLexicalEnvironment catchEnv = TSLexicalEnvironment.newDeclarativeEnvironment(environment);
+			//Call the CreateMutableBinding concrete method of catchEnv passing the Identifier String value as the argument.
+			//catchEnv.declareVariable(TSString.create(tryStatement.getCatchIdentifier()), false);
+			//commented out the line above because declareParameter already does this step for us in the next line
+			//Call the SetMutableBinding concrete method of catchEnv passing the Identifier, C, and false as arguments.
+			catchEnv.declareParameter(tryStatement.getCatchIdentifier(), b.getValue().getValue());
+			//Set the running execution contexts LexicalEnvironment to catchEnv.
+			environment = catchEnv;
+			//Let B be the result of evaluating Block.
+			b = visitNode(tryStatement.getCatchBlock());
+			//Set the running execution contexts LexicalEnvironment to oldEnv.
+			environment = oldEnv;
+			//Return B.
+			return b;
+		}
+		
+			
 	}
 }
 

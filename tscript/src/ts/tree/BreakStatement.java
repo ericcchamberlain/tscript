@@ -10,7 +10,7 @@ public class BreakStatement extends Statement{
 
 	private String identifier = null; 
 	
-	public BreakStatement(Location loc, String ident) {
+	public BreakStatement(final Location loc, final String ident) {
 		super(loc);
 		this.identifier = ident; 
 	}

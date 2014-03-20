@@ -153,6 +153,9 @@ public class TreeVisitorBase<T> implements TreeVisitor<T>
 		return null;
 	}
 
+	public T visit(TryStatement tryStatement) {
+		return null;
+	}
   
 }
 

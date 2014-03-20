@@ -323,6 +323,20 @@ public final class TreeDump extends TreeVisitorBase<Object>
 		indentation -= increment;
 		return null;
 	}
+	
+	// visit the ASTs and dump them in order
+	public Object visit(final TryStatement tryStatement)
+	{
+		indent();
+		writer.println("TryStatement");
+		indentation += increment;
+		visitNode(tryStatement.getTryBlock());
+		indent();
+		writer.println("Identifier " + tryStatement.getCatchIdentifier());
+		visitNode(tryStatement.getCatchBlock()); 
+		indentation -= increment;
+		return null;
+	}
 
 }
 

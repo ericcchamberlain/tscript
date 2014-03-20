@@ -90,7 +90,7 @@ formalParameterList
   ;
 
 functionBody
-  returns [ List<SourceElement> lval ]  // WHAT DO I RETURN HERE ?
+  returns [ List<SourceElement> lval ]
   : // empty
     { $lval = new ArrayList<SourceElement>(); }
   | s=sourceElements
@@ -132,6 +132,10 @@ statement
     { $lval = $r.lval; }
   | l=labelledStatement
     { $lval = $l.lval; }
+  | h=throwStatement
+    { $lval = $h.lval; }
+  | y=tryStatement
+    { $lval = $y.lval; }
   | p=printStatement
     { $lval = $p.lval; }
   ;
@@ -204,6 +208,17 @@ throwStatement
   returns [ Statement lval ]
   : THROW e=expression SEMICOLON
     { $lval = buildThrowStatement(loc($start), $e.lval); }
+  ;
+
+
+tryStatement
+  returns [ Statement lval ]
+  : TRY b1=block CATCH LPAREN i=IDENTIFIER RPAREN b2=block
+    { $lval = buildTryStatement(loc($start), $b1.lval, $i.text, $b2.lval, null); }
+  | TRY b1=block FINALLY b2=block
+    { /*  NOT IMPLEMENTED */ }
+  | TRY b1=block CATCH LPAREN i=IDENTIFIER RPAREN b2=block FINALLY b3=block
+    { /*  NOT IMPLEMENTED */ }
   ;
 
 variableDeclarationList
@@ -488,6 +503,9 @@ THROW : 'throw';
 WHILE : 'while';
 IF : 'if';
 ELSE : 'else';
+TRY : 'try';
+CATCH : 'catch';
+FINALLY : 'finally';
 
 IDENTIFIER : IdentifierCharacters;
 

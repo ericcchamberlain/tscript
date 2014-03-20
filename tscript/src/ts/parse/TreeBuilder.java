@@ -342,6 +342,22 @@ public class TreeBuilder
 		return new ThrowStatement(loc, exp);
 	}
 
+	/** Build a try statement.
+	 *
+	 *  @param  loc  location in source code (file, line, column)
+	 *  @param  b1 the first block statement 
+	 *  @param  catchID the identifier for the catch statement 
+	 *  @param  b2 the second block statement
+	 *  @param  b3 the third block statement
+	 */
+	public static Statement buildTryStatement(final Location loc,
+			final Statement b1, final String catchID,
+			final Statement b2, final Statement b3)
+	{
+		Message.log("TreeBuilder: TryStatement");
+		return new TryStatement(loc, b1, catchID, b2, b3);
+	}
+
 	//
 	// methods to detect "early" (i.e. semantic) errors
 	//
