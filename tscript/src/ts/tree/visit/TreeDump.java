@@ -226,6 +226,7 @@ public final class TreeDump extends TreeVisitorBase<Object>
 		indentation += increment;
 		if (breakStatement.getIdentifier() != null)
 		{
+			indent();
 			writer.println("Identifier " + breakStatement.getIdentifier());
 		}
 		indentation -= increment;
@@ -240,6 +241,7 @@ public final class TreeDump extends TreeVisitorBase<Object>
 		indentation += increment;
 		if (continueStatement.getIdentifier() != null)
 		{
+			indent();
 			writer.println("Identifier " + continueStatement.getIdentifier());
 		}
 		indentation -= increment;
@@ -254,6 +256,70 @@ public final class TreeDump extends TreeVisitorBase<Object>
 		indentation += increment;
 		writer.println("Identifier " + labelledStatement.getIdentifierName());
 		visitNode(labelledStatement.getStatement());
+		indentation -= increment;
+		return null;
+	}
+	
+	// visit the ASTs and dump them in order
+	public Object visit(final FunctionExpression functionExpression)
+	{
+		indent();
+		writer.println("FunctionExpression");
+		indentation += increment;
+		if (functionExpression.getIdentifierName() != null)
+		{
+			indent();
+			writer.println("Identifier " + functionExpression.getIdentifierName());
+
+		}
+		if ((functionExpression.getFunctionBody() != null) && (!functionExpression.getFunctionBody().isEmpty()))
+		{
+			indent();
+			writer.println("FunctionBody ");
+			for (SourceElement se : functionExpression.getFunctionBody()) {
+				visitNode(se);
+			}
+		}
+		indentation -= increment;
+		return null;
+	}
+	
+	// visit the ASTs and dump them in order
+	public Object visit(final CallExpression callExpression)
+	{
+		indent();
+		writer.println("CallExpression");
+		indentation += increment;
+		if (callExpression.getExpression() != null)
+		{
+			indent();
+			writer.println("Member Expression");
+			visitNode(callExpression.getExpression());
+		}
+		if ((callExpression.getArguments() != null) && (!callExpression.getArguments().isEmpty()))
+		{
+			indent();
+			writer.println("Arguments");
+			for (Expression e : callExpression.getArguments()) {
+				visitNode(e);
+			}
+		}
+		indentation -= increment;
+		return null;
+	}
+	
+	// visit the ASTs and dump them in order
+	public Object visit(final ReturnStatement returnStatement)
+	{
+		indent();
+		writer.println("ReturnStatement");
+		indentation += increment;
+		if (returnStatement.getExpression() != null)
+		{
+			indent();
+			writer.println("Expression");
+			visitNode(returnStatement.getExpression());
+		}
 		indentation -= increment;
 		return null;
 	}
