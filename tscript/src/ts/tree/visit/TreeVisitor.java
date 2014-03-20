@@ -54,6 +54,8 @@ public interface TreeVisitor<T>
 
   T visit(ReturnStatement returnStatement);
 
+  T visit(ThrowStatement throwStatement);
+
 
 }
 

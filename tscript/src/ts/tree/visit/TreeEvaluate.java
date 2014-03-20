@@ -463,8 +463,19 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 		environment.declareVariable(TSString.create(varStatement.getName()), false);
 		return TSCompletion.createNormalNull();
 	}
-	
 
+	/** Visit the throw statement AST 
+	 *  @param throwStatement  the throw statement to evaluate
+	 */
+	public TSCompletion visit(final ThrowStatement throwStatement)
+	{
+		TSValue expValue = visitNode(throwStatement.getExpression()).getValue();
+		return TSCompletion.create(TSCompletionType.Throw, expValue.getValue().getValue(), null); 
+	}
+	
+	/** Visit the return statement AST 
+	 *  @param returnStatement  the return statement to evaluate
+	 */
 	public TSCompletion visit(final ReturnStatement returnStatement)
 	{
 		if (returnStatement.getExpression() == null)
@@ -478,35 +489,43 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 		}
 	}
 
+	/** Visit the call expression AST 
+	 *  @param callExpression  the call expression to evaluate
+	 */
 	public TSCompletion visit(final CallExpression callExpression)
 	{
 		Expression expression = callExpression.getExpression();
 		TSFunctionObject funcObj = null;
-		//check if an object 
+		//check if an object and isCallable
 		TSValue exprValue = visitNode(expression).getValue().getValue();
 		if (exprValue instanceof TSObject && exprValue.isCallable() )
 		{
 			funcObj= (TSFunctionObject) exprValue;
 		} 
-		else 
+		else // throw a type error
 		{
 			return TSCompletion.create(TSCompletionType.Throw, TSString.create("Type Error"), null);
 		}
 		
+		// evaluate the arguments and store their values 
 		List<Expression> arguments = callExpression.getArguments();
 		List<TSValue> argValues = new ArrayList<TSValue>();
 		for (Expression expr : arguments) {
 			argValues.add(visitNode(expr).getValue().getValue());
 		}
 		
+		//backup the current lexical environment and set to the function 
+		//object's lexical environment 
 		TSLexicalEnvironment originalEnvironment = environment;
 		environment = TSLexicalEnvironment.newDeclarativeEnvironment(funcObj.getScope());
 		List<String> parameters = funcObj.getNames();
 		
+		//associate the values of the arguments with the parameters in the lexical environment 
 		for (int i = 0; i < parameters.size(); i++) {
 			environment.declareParameter(parameters.get(i), argValues.get(i));
 		}
-		
+		//execute each of the statements in the function body, checking for 
+		//throw and return values 
 		List<SourceElement> se = funcObj.getCode();
 		TSCompletion returnValue = TSCompletion.createNormal(TSUndefined.value); 
 		for (SourceElement sourceElement : se) {
@@ -515,15 +534,14 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 				environment = originalEnvironment; 
 				return returnValue; 
 			}
-			if (returnValue.getType() == TSCompletionType.Return){
+			else if (returnValue.getType() == TSCompletionType.Return){
 				environment = originalEnvironment; 
 				return TSCompletion.createNormal(returnValue.getValue());
 			}
 		}
+		//restore the original lexical environment 
 		environment = originalEnvironment; 
 		return returnValue; 
 	}
-
-
 }
 

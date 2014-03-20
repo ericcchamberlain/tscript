@@ -304,21 +304,43 @@ public class TreeBuilder
 	}
 
 
-
+	/** Build a call statement.
+	 *
+	 *  @param  loc  location in source code (file, line, column)
+	 *  @param  exp  expression subtree.
+	 *  @param  args  list of arguments 
+	 */
 	public static Expression buildCallExpression(final Location loc,
-			final Expression expr, final List<Expression> args)
+			final Expression exp, final List<Expression> args)
 	{
 		Message.log("TreeBuilder: CallExpression");
-		return new CallExpression(loc, expr, args);
+		return new CallExpression(loc, exp, args);
 	}
 
+	/** Build a return statement.
+	 *
+	 *  @param  loc  location in source code (file, line, column)
+	 *  @param  exp  expression subtree.
+	 */
 	public static Statement buildReturnStatement(final Location loc,
-			final Expression expr)
+			final Expression exp)
 	{
 		Message.log("TreeBuilder: ReturnStatement");
-		return new ReturnStatement(loc, expr);
+		return new ReturnStatement(loc, exp);
 	}
 
+
+	/** Build a throw statement.
+	 *
+	 *  @param  loc  location in source code (file, line, column)
+	 *  @param  exp  expression.
+	 */
+	public static Statement buildThrowStatement(final Location loc,
+			final Expression exp)
+	{
+		Message.log("TreeBuilder: ThrowStatement");
+		return new ThrowStatement(loc, exp);
+	}
 
 	//
 	// methods to detect "early" (i.e. semantic) errors

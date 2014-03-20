@@ -152,31 +152,31 @@ emptyStatement
 
 ifStatement
   returns [ Statement lval ]
-  : 'if' LPAREN e=expression RPAREN s1=statement 'else' s2=statement
+  : IF LPAREN e=expression RPAREN s1=statement ELSE s2=statement
     { $lval = buildIfStatement(loc($start), $e.lval, $s1.lval, $s2.lval); }
-  | 'if' LPAREN e=expression RPAREN s1=statement
+  | IF LPAREN e=expression RPAREN s1=statement
     { $lval = buildIfStatement(loc($start), $e.lval, $s1.lval, null); }
   ;
 
 iterationStatement
   returns [ Statement lval ]
-  : 'while' LPAREN e=expression RPAREN s=statement
+  : WHILE LPAREN e=expression RPAREN s=statement
     { $lval = buildWhileStatement(loc($start), $e.lval, $s.lval); }
   ;
 
 breakStatement
   returns [ Statement lval ]
-  : 'break' SEMICOLON
+  : BREAK SEMICOLON
     { $lval = buildBreakStatement(loc($start), null); }
-  | 'break' i=IDENTIFIER SEMICOLON
+  | BREAK i=IDENTIFIER SEMICOLON
     { $lval = buildBreakStatement(loc($start), $i.text); }
   ;
 
 continueStatement
   returns [ Statement lval ]
-  : 'continue' SEMICOLON
+  : CONTINUE SEMICOLON
     { $lval = buildContinueStatement(loc($start), null); }
-  | 'continue' i=IDENTIFIER SEMICOLON
+  | CONTINUE i=IDENTIFIER SEMICOLON
     { $lval = buildContinueStatement(loc($start), $i.text); }
   ;
 
@@ -194,10 +194,16 @@ varStatement
 
 returnStatement 
   returns [ Statement lval ]
-  : 'return' SEMICOLON
+  : RETURN SEMICOLON
     { $lval = buildReturnStatement(loc($start), null); }
-  | 'return' e=expression SEMICOLON
+  | RETURN e=expression SEMICOLON
     {$lval = buildReturnStatement(loc($start), $e.lval); }
+  ;
+
+throwStatement
+  returns [ Statement lval ]
+  : THROW e=expression SEMICOLON
+    { $lval = buildThrowStatement(loc($start), $e.lval); }
   ;
 
 variableDeclarationList
@@ -475,6 +481,13 @@ COLON : (':');
 PRINT : 'print';
 VAR : 'var';
 FUNCTION : 'function';
+RETURN : 'return';
+CONTINUE : 'continue';
+BREAK : 'break';
+THROW : 'throw';
+WHILE : 'while';
+IF : 'if';
+ELSE : 'else';
 
 IDENTIFIER : IdentifierCharacters;
 
