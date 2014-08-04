@@ -333,6 +333,8 @@ memberExpression
     { $lval = $p.lval; }
   | f=functionExpression
     { $lval = $f.lval; }
+  | m=memberExpression DOT i=IDENTIFIER
+    { $lval = buildPropertyAccessor(loc($start), $m.lval, $i.text); }
   /*
   MemberExpression [ Expression ]
   MemberExpression . IdentifierName
@@ -340,12 +342,12 @@ memberExpression
   */
   ;
 
-
 newExpression
   returns [ Expression lval ]
   : m=memberExpression
     { $lval = $m.lval; }
-// new newExpression
+  | NEW n=newExpression
+    { $lval = buildNewExpression(loc($start), $n.lval); }
   ;
 
 callExpression
@@ -491,6 +493,7 @@ LESS_OR_EQUAL : ('<')('=');
 GREATER_OR_EQUAL : ('>')('=');
 COMMA : (',');
 COLON : (':');
+DOT : ('.');
 
 // keywords start here
 PRINT : 'print';
@@ -506,6 +509,7 @@ ELSE : 'else';
 TRY : 'try';
 CATCH : 'catch';
 FINALLY : 'finally';
+NEW : 'new';
 
 IDENTIFIER : IdentifierCharacters;
 

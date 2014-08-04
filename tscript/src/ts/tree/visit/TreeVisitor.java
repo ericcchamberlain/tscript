@@ -58,6 +58,9 @@ public interface TreeVisitor<T>
 
   T visit(TryStatement tryStatement);
 
+  T visit(PropertyAccessor propertyAccessor);
+
+  T visit(NewExpression newExpression);
 
 }
 

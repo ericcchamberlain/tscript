@@ -1,0 +1,51 @@
+TODO:
+
+--- Phase 3 ----
+- add the "dot" operator to the grammar and build an AST node for it
+- add the "new" operator to the grammar and build an AST node for it 
+- add a TSObject class and add a field to TSObject which is a HashMap for storing properties
+- add a TSPropertyReference class, derived from TSReference. The "base" of a property regerence is an object.
+- implement a TreeEvaluate method for the "dot" operator, which should produce a TSPropertyReference.
+- Implement a TreeEvaluate method for the "new" operator, which should produce a TSObject.
+- you will need to upgrade the earyly error detection for assignment to allow a "dot" operator to be the left child of assignment. See the "produceReference" method in ThreeBuilder.java 
+
+
+
+-implement TSProperyReference
+	-- getValue 
+	-- putValue 
+
+
+-added buildNewExpression
+
+
+11.2.1 Properties are access by name; 
+	MemberExpression . IdentifierName
+	CallExpression . IdentifierName
+
+
+DONE:
+
+- added NEW to grammar
+- added DOT to grammar 
+- added buildPropertyAccessor() to MemberExpression grammar 
+- added PropertyAccessor visit method to TreeVisitor
+- added PorpertyAccessor visit method to TreeVisitorBase
+
+- Changed TSPrimitive to extend from TSObject
+
+NEXT:
+evauluate the property accessor 
+TreeDump
+
+
+
+TSPrimitive extend TSObject ? 
+
+
+
+
+Need to add call() method to TSFunctionObject 
+
+in TreeDump, nested property accessors are not being build correctly 
+

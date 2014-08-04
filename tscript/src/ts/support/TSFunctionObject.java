@@ -12,14 +12,17 @@ import ts.tree.SourceElement;
 public final class TSFunctionObject extends TSObject
 {
 	private TSLexicalEnvironment scope; 
-	private List<String> names = new ArrayList<String>(); 
-	private List<SourceElement> code = new ArrayList<SourceElement>(); 
+	private List<String> names; 
+	private List<SourceElement> code;
 
-	public TSFunctionObject(TSLexicalEnvironment s, List<String> n,
-	   List<SourceElement> c ) {
-		this.scope = s; 
-		this.names.addAll(n);
-		this.code.addAll(c);
+	public TSFunctionObject(TSLexicalEnvironment scope, List<String> names,
+	   List<SourceElement> code ) {
+		super(); 
+		this.names = new ArrayList<String>(); 
+		this.code = new ArrayList<SourceElement>(); 
+		this.scope = scope; 
+		this.names.addAll(names);
+		this.code.addAll(code);
 	}
 
 	public boolean isCallable()

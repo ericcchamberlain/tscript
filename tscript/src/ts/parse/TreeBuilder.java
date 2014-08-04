@@ -328,6 +328,18 @@ public class TreeBuilder
 		Message.log("TreeBuilder: ReturnStatement");
 		return new ReturnStatement(loc, exp);
 	}
+	
+	/** Build a new expression.
+	 *
+	 *  @param  loc  location in source code (file, line, column)
+	 *  @param  exp  expression subtree.
+	 */
+	public static Expression buildNewExpression(final Location loc,
+			final Expression exp)
+	{
+		Message.log("TreeBuilder: NewExpression");
+		return new NewExpression(loc, exp);
+	}
 
 
 	/** Build a throw statement.
@@ -365,7 +377,7 @@ public class TreeBuilder
 	// helper function to detect "reference expected" errors
 	private static boolean producesReference(Node node)
 	{
-		if (node instanceof Identifier)
+		if (node instanceof Identifier || node instanceof PropertyAccessor)
 		{
 			return true;
 		}
@@ -383,6 +395,19 @@ public class TreeBuilder
 		{
 			Message.error(loc, "assignment destination must be a Reference");
 		}
+	}
+
+
+	/** Build a property accessor expression. 
+	 *
+	 *  @param  loc  location in source code (file, line, column)
+	 *  @param  exp  expression subtree.
+	 *  @param  i 	 the identifier  
+	 */
+	public static Expression buildPropertyAccessor(Location loc, final Expression exp, final String i)
+	{
+		Message.log("TreeBuilder: PropertyAccessor");
+		return new PropertyAccessor(loc, exp, i);
 	}
 
 }

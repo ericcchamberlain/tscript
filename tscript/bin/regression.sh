@@ -131,6 +131,46 @@ cd ..
 cd ..
 cd ..
 
+# test phase3 sample tests 
+printf "*** Phase 3 Sample Tests ***\n"
+cd phase3
+for prog in p1 p2 p3 p4 p5 p5a p6
+do
+  ../../build/bin/ts $prog.ts >&$prog.out
+  cmp $prog.out results/$prog.out
+  if [ $? -ne 0 ]; then 
+    printf '%-20s\e[1;31m%-6s\e[m%s\n' "$prog.ts" "FAILED"
+    FAILED=$[$FAILED +1]
+  else 
+    printf '%-20s\e[1;32m%-6s\e[m%s\n' "$prog.ts" "PASSED"
+    PASSED=$[$PASSED +1]
+  fi
+  rm -f $prog.out
+done
+printf "*** END ***\n\n"
+
+# test phase3 grading tests
+printf "*** Phase 3 Grading Tests ***\n"
+cd grade/other
+for prog in t1a t1b t2a t2b t2c t3a t3b t3c t3d t3err t4a t4b t4c t4d t5a t5b t5c t5d t6a t6b t6c t6d t6e t6f
+do
+  ../../../../build/bin/ts $prog.ts >&$prog.out
+  cmp $prog.out results/$prog.out
+  if [ $? -ne 0 ]; then 
+    printf '%-20s\e[1;31m%-6s\e[m%s\n' "$prog.ts" "FAILED"
+    FAILED=$[$FAILED +1]
+  else 
+    printf '%-20s\e[1;32m%-6s\e[m%s\n' "$prog.ts" "PASSED"
+    PASSED=$[$PASSED +1]
+  fi
+  rm -f $prog.out
+done
+printf "*** END ***\n\n"
+
+cd ..
+cd ..
+cd ..
+
 cd ../bin
 
 printf '%s\n' "$PASSED passed, $FAILED failed"

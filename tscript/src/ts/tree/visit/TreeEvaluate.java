@@ -8,8 +8,6 @@ import ts.support.*;
 import java.util.List;
 import java.util.ArrayList;
 
-import org.xml.sax.ext.LexicalHandler;
-
 /**
  * Evaluate an AST. Parameterized by the "completion" type.
  * <p>
@@ -222,6 +220,11 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 				}
 			}
 			TSString target = null;
+			// if the block statement is empty, return a null TSCompletion 
+			if (completion == null)
+			{
+				return TSCompletion.createNormalNull(); 
+			}
 			if (completion.getTarget() != null)
 			{
 				target = completion.getTarget().toStr();
@@ -506,7 +509,7 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 		} 
 		else // throw a type error
 		{
-			return TSCompletion.create(TSCompletionType.Throw, TSString.create("Type Error"), null);
+			return TSCompletion.create(TSCompletionType.Throw, TSString.create("TypeError"), null);
 		}
 		
 		// evaluate the arguments and store their values 
@@ -576,9 +579,83 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 			environment = oldEnv;
 			//Return B.
 			return b;
+		}	
+	}
+	
+	/** Visit the PropertyAccessor ASTs and evaluate 
+	 *  @param propertyAccessor  the property accessor node to evaluate
+	 *  
+	 *  ECMA 11.2.1
+	 *  http://www.ecma-international.org/ecma-262/5.1/#sec-11.2.1
+	 *  
+	 */
+	public TSCompletion visit(final PropertyAccessor propertyAccessor)
+	{
+		//Let baseReference be the result of evaluating MemberExpression.
+		TSCompletion baseReference =  visitNode(propertyAccessor.getExpression());
+		//Let baseValue be GetValue(baseReference).
+		TSValue baseValue = baseReference.getValue();
+		
+		/* ONLY NEEDED FOR MemberExpression [ Expression ] notation */
+		//Let propertyNameReference be the result of evaluating Expression.
+		//Let propertyNameValue be GetValue(propertyNameReference).
+		
+		//Call CheckObjectCoercible(baseValue).
+		if (!checkObjectCoercible(baseValue)){
+			// throw a type error message string
+			return TSCompletion.create(TSCompletionType.Throw, TSString.create("TypeError"), null);
 		}
 		
-			
+		//Let propertyNameString be ToString(propertyNameValue).
+		
+		//If the syntactic production that is being evaluated is contained in strict mode code, let strict be true, else let strict be false.
+		
+		//Return a value of type Reference whose base value is baseValue and whose referenced name is propertyNameString, and whose strict mode flag is strict.
+		 TSPropertyReference p = new TSPropertyReference(baseValue, TSString.create(propertyAccessor.getIdentifierName())); 
+		 return TSCompletion.createNormal(p);
 	}
+	
+	
+	/** checkObjectCoercible checks if the value can be converted to an Object
+	 *  http://www.ecma-international.org/ecma-262/5.1/#sec-9.10
+	 * @param value value to check 
+	 * @return true if convertable to object, false otherwise 
+	 */
+	public boolean checkObjectCoercible(TSValue value)
+	{
+		if (value instanceof TSUndefined || value instanceof TSNull) 
+		{
+			return false;
+		}
+		else 
+		{
+			return true; 
+		}
+	}
+	
+	/** Visit the NewExpression ASTs and evaluate 
+	 *  @param newExpression  the expression to evaluate
+	 *  http://www.ecma-international.org/ecma-262/5.1/#sec-11.2.2
+	 */
+	public TSCompletion visit(final NewExpression newExpression)
+	{
+		//Let ref be the result of evaluating NewExpression.
+		TSValue ref = visitNode(newExpression.getExp()).getValue(); 
+		//Let constructor be GetValue(ref).
+		TSValue constructor = ref.getValue();
+		//If Type(constructor) is not Object, throw a TypeError exception.
+		if (!(constructor instanceof TSObject))
+		{
+			return TSCompletion.create(TSCompletionType.Throw, TSString.create("TypeError"), null);
+		}
+		//If constructor does not implement the [[Construct]] internal method, throw a TypeError exception.
+		
+		//Return the result of calling the [[Construct]] internal method on constructor, providing no arguments (that is, an empty list of arguments).
+		TSObject t = TSObject.create(); 
+		
+		return TSCompletion.createNormal(t);
+	}
+	
+	
 }
 

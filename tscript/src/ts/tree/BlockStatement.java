@@ -12,7 +12,9 @@ public class BlockStatement extends Statement{
 	
 	public BlockStatement(Location loc, List<Statement> value) {
 		super(loc);
-		this.sl.addAll(value); 
+		// if the block is not empty, add all of its elements
+		if (value != null)
+			this.sl.addAll(value); 
 	}
 
 	/** Returns the ArrayList of Statements */

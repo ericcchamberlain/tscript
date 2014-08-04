@@ -337,6 +337,43 @@ public final class TreeDump extends TreeVisitorBase<Object>
 		indentation -= increment;
 		return null;
 	}
+	
+	// visit the ASTs and dump them in order
+	public Object visit(final NewExpression newExpression)
+	{
+		indent();
+		writer.println("NewExpression");
+		indentation += increment;
+		if (newExpression.getExp() != null)
+		{
+			visitNode(newExpression.getExp());
+		}
+		indentation -= increment;
+		return null;
+	}
+	
+	// visit the ASTs and dump them in order
+	public Object visit(final PropertyAccessor propertyAccessor)
+	{
+		indent();
+		writer.println("PropertyAccessor");
+		indentation += increment;
+		indent();
+		writer.println("Base");
+		indentation += increment;
+		visitNode(propertyAccessor.getExpression()); 
+		indentation -= increment;
+		indent();
+		writer.println("Property Name");
+		indentation += increment;
+		indent();
+		writer.println("Identifier " + propertyAccessor.getIdentifierName());
+		indentation -= increment;
+		indentation -= increment;
+		return null;
+	}
+	
+	
 
 }
 
