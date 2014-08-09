@@ -6,9 +6,7 @@ package ts.support;
  */
 public class TSPropertyReference extends TSReference
 {
-	//https://piazza.com/class/hpc07xo86m62tn?cid=108
-	//implement the getValue and putValue methods in this class
-
+	
 	private TSObject base; 
 	// name inherited  from TSReference 
 
@@ -63,6 +61,25 @@ public class TSPropertyReference extends TSReference
 	public TSValue abstractRelationalComparison(TSValue right) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public TSObject toObject() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	//https://piazza.com/class/hpc07xo86m62tn?cid=108
+	//implement the getValue and putValue methods in this class
+	
+	public void putValue(TSValue value)
+	{
+		base.addProperty(name, value);
+	}
+	
+	public TSValue getValue()
+	{
+		return base.getProperty(name);
 	}
 	
 }

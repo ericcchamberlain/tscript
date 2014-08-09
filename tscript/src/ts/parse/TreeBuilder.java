@@ -335,10 +335,10 @@ public class TreeBuilder
 	 *  @param  exp  expression subtree.
 	 */
 	public static Expression buildNewExpression(final Location loc,
-			final Expression exp)
+			final Expression exp, final List<Expression> args )
 	{
 		Message.log("TreeBuilder: NewExpression");
-		return new NewExpression(loc, exp);
+		return new NewExpression(loc, exp, args);
 	}
 
 

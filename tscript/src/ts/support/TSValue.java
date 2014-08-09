@@ -47,7 +47,8 @@ public abstract class TSValue
 	abstract public TSBoolean equalsOperator(final TSValue right);
 	
 	abstract public TSValue abstractRelationalComparison(final TSValue right);
-
+	
+	abstract public TSObject toObject(); 
 
 	/** Less-than operator uses the abstract 
 	 *  relational equalty algorith. 
@@ -223,7 +224,6 @@ public abstract class TSValue
 	{
 		return false; 
 	}
-
 
 }
 

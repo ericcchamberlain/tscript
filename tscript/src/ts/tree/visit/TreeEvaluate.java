@@ -594,7 +594,7 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 		//Let baseReference be the result of evaluating MemberExpression.
 		TSCompletion baseReference =  visitNode(propertyAccessor.getExpression());
 		//Let baseValue be GetValue(baseReference).
-		TSValue baseValue = baseReference.getValue();
+		TSValue baseValue = baseReference.getValue().getValue();
 		
 		/* ONLY NEEDED FOR MemberExpression [ Expression ] notation */
 		//Let propertyNameReference be the result of evaluating Expression.
@@ -607,12 +607,11 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 		}
 		
 		//Let propertyNameString be ToString(propertyNameValue).
-		
 		//If the syntactic production that is being evaluated is contained in strict mode code, let strict be true, else let strict be false.
 		
 		//Return a value of type Reference whose base value is baseValue and whose referenced name is propertyNameString, and whose strict mode flag is strict.
-		 TSPropertyReference p = new TSPropertyReference(baseValue, TSString.create(propertyAccessor.getIdentifierName())); 
-		 return TSCompletion.createNormal(p);
+		 TSReference returnValue = new TSPropertyReference((TSObject)baseValue, TSString.create(propertyAccessor.getIdentifierName())); 
+		 return TSCompletion.createNormal(returnValue);
 	}
 	
 	
@@ -651,9 +650,9 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 		//If constructor does not implement the [[Construct]] internal method, throw a TypeError exception.
 		
 		//Return the result of calling the [[Construct]] internal method on constructor, providing no arguments (that is, an empty list of arguments).
-		TSObject t = TSObject.create(); 
+		//TSObject t = TSObject.create(); 
 		
-		return TSCompletion.createNormal(t);
+		return TSCompletion.createNormal((TSObject)constructor);
 	}
 	
 	

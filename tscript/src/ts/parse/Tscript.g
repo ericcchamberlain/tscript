@@ -335,10 +335,11 @@ memberExpression
     { $lval = $f.lval; }
   | m=memberExpression DOT i=IDENTIFIER
     { $lval = buildPropertyAccessor(loc($start), $m.lval, $i.text); }
+  | NEW m=memberExpression a=arguments
+    { $lval = buildNewExpression(loc($start), $m.lval, $a.lval);}
+
   /*
   MemberExpression [ Expression ]
-  MemberExpression . IdentifierName
-  new MemberExpression Arguments
   */
   ;
 
@@ -347,16 +348,17 @@ newExpression
   : m=memberExpression
     { $lval = $m.lval; }
   | NEW n=newExpression
-    { $lval = buildNewExpression(loc($start), $n.lval); }
+    { $lval = buildNewExpression(loc($start), $n.lval, null); }
   ;
 
 callExpression
   returns [ Expression lval ]
   : m=memberExpression a=arguments
     { $lval = buildCallExpression(loc($start), $m.lval, $a.lval); }
-  /*
   | c=callExpression a=arguments
     { $lval = buildCallExpression(loc($start), $m.lval, $a.lval); }
+  | c=callExpression DOT i=IDENTIFIER
+    { $lval = buildPropertyAccessor(loc($start), $c.lval, $i.text); }
   /*
   CallExpression [ Expression ]
   CallExpression . IdentifierName

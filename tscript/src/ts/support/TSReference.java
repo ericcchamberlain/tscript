@@ -13,9 +13,9 @@ package ts.support;
  * </ul>
  *
  */
-abstract class TSReference extends TSValue
+public abstract class TSReference extends TSValue
 {
-  private final TSString name;
+  protected final TSString name;
 
   TSReference(final TSString name)
   {

@@ -40,7 +40,11 @@ public final class TSLexicalEnvironment
         // setting the base of an environment reference to null to indicate
         // that the identified is not declared
         // TODO: fix this when properties are being supported
-        return new TSEnvironmentReference(name, null);
+        
+        //return new TSEnvironmentReference(name, null);
+        TSPropertyReference lexProperty(name, TreeE)
+
+
       }
       return outerEnvironment.getIdentifierReference(name);
     }

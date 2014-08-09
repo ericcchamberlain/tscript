@@ -88,6 +88,12 @@ final class TSEnvironmentReference extends TSReference
 		return this.getValue().abstractRelationalComparison(right);
 	}
 
+	@Override
+	public TSObject toObject() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 
 }
