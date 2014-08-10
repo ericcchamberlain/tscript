@@ -22,7 +22,7 @@ public abstract class TSReference extends TSValue
     this.name = name;
   }
 
-  TSString getReferencedName()
+  public TSString getReferencedName()
   {
     return name;
   }

@@ -7,6 +7,7 @@ import ts.support.*;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * Evaluate an AST. Parameterized by the "completion" type.
@@ -15,18 +16,23 @@ import java.util.ArrayList;
  *
  */
 public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
-{
+{	
+	/* Declarative environment records are used to define the effect
+	 * of ECMAScript language syntactic elements such as FunctionDeclarations,
+	 * VariableDeclarations, and Catch clauses that directly associate
+	 * identifier bindings with ECMAScript language values.
+	 */
 	// this is a declarative environment for now
 	// TODO: change to an environment for the global object
 	private TSLexicalEnvironment environment;
-
+			
 	public TreeEvaluate()
 	{
 		environment = TSLexicalEnvironment.newDeclarativeEnvironment(null);
 		// add undefined to the lexical environment
-		environment.declareVariable(TSString.create("undefined"), false);  
+		environment.declareVariable(TSString.create("undefined"), false);
 	}
-
+	
 	// visit a list of ASTs and evaluate them in order
 	// use wildcard for generality: list of Statements, list of Expressions, etc
 	// an array must be returned but this will always return an array of size 1
@@ -501,8 +507,58 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 	{
 		Expression expression = callExpression.getExpression();
 		TSFunctionObject funcObj = null;
+		TSValue refVal = visitNode(expression).getValue(); 
+		
+		// evaluate the arguments and store their values 
+		List<Expression> arguments = callExpression.getArguments();
+		List<TSValue> argValues = new ArrayList<TSValue>();
+		for (Expression expr : arguments) {
+			argValues.add(visitNode(expr).getValue().getValue());
+		}
+		
+		//check for build in functions
+		if ((refVal instanceof TSPropertyReference) && ( (TSPropertyReference) refVal).getReferencedName().equals(TSString.create("isNaN")))
+		{
+			TSNumber arg = argValues.get(0).toNumber();
+			if (Double.isNaN(arg.getInternal()))
+			{
+				return TSCompletion.createNormal(TSBoolean.booleanTrue);
+			}
+			else 
+			{
+				return TSCompletion.createNormal(TSBoolean.booleanFalse);
+			}
+		}
+		if ((refVal instanceof TSPropertyReference) && ( (TSPropertyReference) refVal).getReferencedName().equals(TSString.create("isFinite")))
+		{
+			TSNumber arg = argValues.get(0).toNumber();
+			if ( Double.isNaN(arg.getInternal()) || Double.isInfinite(arg.getInternal()))
+			{
+				return TSCompletion.createNormal(TSBoolean.booleanFalse);
+			}
+			else 
+			{
+				return TSCompletion.createNormal(TSBoolean.booleanTrue);
+			}
+		}
+		if ((refVal instanceof TSPropertyReference) && ( (TSPropertyReference) refVal).getReferencedName().equals(TSString.create("readln")))
+		{
+			Scanner scanner = new Scanner(System.in);
+			String systemInput = scanner.nextLine();
+			scanner.close();
+			if (systemInput.isEmpty())
+			{
+				systemInput = "";
+			} 
+			else
+			{
+				systemInput += "\n";
+			}
+			return TSCompletion.createNormal(TSString.create(systemInput));
+		} 
+		
 		//check if an object and isCallable
-		TSValue exprValue = visitNode(expression).getValue().getValue();
+		TSValue exprValue = refVal.getValue();
 		if (exprValue instanceof TSObject && exprValue.isCallable() )
 		{
 			funcObj= (TSFunctionObject) exprValue;
@@ -510,13 +566,6 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 		else // throw a type error
 		{
 			return TSCompletion.create(TSCompletionType.Throw, TSString.create("TypeError"), null);
-		}
-		
-		// evaluate the arguments and store their values 
-		List<Expression> arguments = callExpression.getArguments();
-		List<TSValue> argValues = new ArrayList<TSValue>();
-		for (Expression expr : arguments) {
-			argValues.add(visitNode(expr).getValue().getValue());
 		}
 		
 		//backup the current lexical environment and set to the function 

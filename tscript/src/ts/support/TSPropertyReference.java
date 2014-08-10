@@ -74,7 +74,15 @@ public class TSPropertyReference extends TSReference
 	
 	public void putValue(TSValue value)
 	{
-		base.addProperty(name, value);
+		//if the base is TSUndefined, then add the property to the global object
+		if(base instanceof TSUndefined)
+		{
+			TSGlobalObject.getGlobalObject().addProperty(getReferencedName(), value);
+		}
+		else
+		{
+			base.addProperty(name, value);
+		}
 	}
 	
 	public TSValue getValue()

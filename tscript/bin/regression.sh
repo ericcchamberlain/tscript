@@ -152,7 +152,7 @@ printf "*** END ***\n\n"
 # test phase3 grading tests
 printf "*** Phase 3 Grading Tests ***\n"
 cd grade/other
-for prog in t1a t1b t2a t2b t2c t3a t3b t3c t3d t3err t4a t4b t4c t4d t5a t5b t5c t5d t6a t6b t6c t6d t6e t6f
+for prog in t1a t1b t2a t2b t2c t3a t3b t3c t3d t4a t4b t4c t4d t5a t5b t5c t5d t6a t6b t6c t6d t6e t6f
 do
   ../../../../build/bin/ts $prog.ts >&$prog.out
   cmp $prog.out results/$prog.out

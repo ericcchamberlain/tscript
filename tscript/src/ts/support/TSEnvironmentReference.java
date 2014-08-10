@@ -63,13 +63,7 @@ final class TSEnvironmentReference extends TSReference
 	/** Assign a value to the name specified by the Reference. */
 	public void putValue(final TSValue value)
 	{
-		if (base == null)
-		{
-			Message.evaluationError("undefined identifier: " +
-					this.getReferencedName().getInternal());
-		}
 		base.setMutableBinding(this.getReferencedName(), value);
-		return;
 	}
 
 	/** Eqality operator for the reference type. 

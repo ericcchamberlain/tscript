@@ -58,8 +58,6 @@ sourceElement
   : s=statement
     { $lval = $s.lval; }
   /* NEEDED FOR FUNCTIONS. 
-    When I enable this, I need to change all the places I used
-    sourceElement casting to (statement) and replaec with instanceOf ... 
   | f=functionDeclaration
     { $lval = $f.lval; }
   */

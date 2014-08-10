@@ -3,7 +3,6 @@ package ts.support;
 
 import java.util.HashMap;
 
-
 /**
  * The super class for all Tscript Object values.
  */
@@ -20,13 +19,13 @@ public class TSObject extends TSValue
 	
 	protected TSObject()
 	{
-		 this.prototype = TSNull.value;
+		 this.setPrototype(TSNull.value);
 		 this.properties = new HashMap<TSString, TSValue>(); 
 	}
 	
 	protected TSObject(TSObject prototype)
 	{
-		 this.prototype = prototype;
+		 this.setPrototype(prototype);
 		 this.properties = new HashMap<TSString, TSValue>(); 
 	}	
 	
@@ -134,7 +133,29 @@ public class TSObject extends TSValue
 		return returnValue; 
 	}
 	
+	public boolean hasProperty(TSString name)
+	{
+		return properties.containsKey(name); 
+	}
 	
+	public void removeProperty(TSString name)
+	{
+		properties.remove(name);
+	}
+
+	/**
+	 * @return the prototype
+	 */
+	public TSObject getPrototype() {
+		return prototype;
+	}
+
+	/**
+	 * @param prototype the prototype to set
+	 */
+	public void setPrototype(TSObject prototype) {
+		this.prototype = prototype;
+	}
 	
 }
 
