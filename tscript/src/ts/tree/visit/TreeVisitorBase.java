@@ -163,6 +163,10 @@ public class TreeVisitorBase<T> implements TreeVisitor<T>
 	public T visit(NewExpression newExpression) {
 		return null;
 	}
+	
+	public T visit(This thisExpression) {
+		return null;
+	}
 
 }
 

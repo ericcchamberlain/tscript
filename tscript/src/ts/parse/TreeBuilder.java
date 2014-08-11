@@ -409,5 +409,15 @@ public class TreeBuilder
 		Message.log("TreeBuilder: PropertyAccessor");
 		return new PropertyAccessor(loc, exp, i);
 	}
+	
+	/** Build this expression. 
+	 *
+	 *  @param  loc  location in source code (file, line, column)
+	 */
+	public static Expression buildThis(Location loc)
+	{
+		Message.log("TreeBuilder: This");
+		return new This(loc);
+	}
 
 }

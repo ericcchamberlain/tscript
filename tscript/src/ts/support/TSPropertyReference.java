@@ -1,6 +1,8 @@
 
 package ts.support;
 
+import ts.Message;
+
 /**
  * 
  */
@@ -82,12 +84,25 @@ public class TSPropertyReference extends TSReference
 		else
 		{
 			base.addProperty(name, value);
+			TSGlobalObject.getGlobalObject().thisObject.addProperty(name, value);
 		}
 	}
 	
 	public TSValue getValue()
 	{
-		return base.getProperty(name);
+		if (base.hasProperty(name)){
+			return base.getProperty(name);
+		}
+		else if (TSGlobalObject.getGlobalObject().thisObject.hasProperty(name))//not to spec, needed for 'this'
+		{
+			return TSGlobalObject.getGlobalObject().thisObject.getProperty(name);
+		}
+		else
+		{
+			Message.evaluationError("undefined identifier: " +
+					this.getReferencedName().getInternal());
+			return null;
+		}
 	}
 	
 }

@@ -62,5 +62,7 @@ public interface TreeVisitor<T>
 
   T visit(NewExpression newExpression);
 
+  T visit(This thisExpression);
+
 }
 

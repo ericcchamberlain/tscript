@@ -387,7 +387,9 @@ argumentList
 
 primaryExpression
   returns [ Expression lval ]
-  : IDENTIFIER
+  : THIS 
+    { $lval = buildThis(loc($start)); }
+  | IDENTIFIER
     { $lval = buildIdentifier(loc($start), $IDENTIFIER.text); }
   | NUMERIC_LITERAL
     { $lval = buildNumericLiteral(loc($start), $NUMERIC_LITERAL.text); }
@@ -510,6 +512,7 @@ TRY : 'try';
 CATCH : 'catch';
 FINALLY : 'finally';
 NEW : 'new';
+THIS : 'this';
 
 IDENTIFIER : IdentifierCharacters;
 

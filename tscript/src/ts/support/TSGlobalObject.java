@@ -3,6 +3,7 @@ package ts.support;
 public class TSGlobalObject extends TSObject
 {
 	private static TSGlobalObject globalObject = null;
+	public TSObject thisObject; 
 	
 	protected TSGlobalObject()
 	{
@@ -15,6 +16,7 @@ public class TSGlobalObject extends TSObject
 		{
 			globalObject = new TSGlobalObject();
 			globalObject.createInternalProperties(); 
+			globalObject.thisObject = new TSObject(); 
 		}
 		return globalObject; 
 	}

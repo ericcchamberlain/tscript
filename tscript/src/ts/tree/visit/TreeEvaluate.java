@@ -25,12 +25,15 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 	// this is a declarative environment for now
 	// TODO: change to an environment for the global object
 	private TSLexicalEnvironment environment;
+	private TSObject thisObject; 
 			
 	public TreeEvaluate()
 	{
 		environment = TSLexicalEnvironment.newDeclarativeEnvironment(null);
 		// add undefined to the lexical environment
 		environment.declareVariable(TSString.create("undefined"), false);
+		//10.4.1.1 set the ThisBinding to the global object.
+		thisObject = TSGlobalObject.getGlobalObject();
 	}
 	
 	// visit a list of ASTs and evaluate them in order
@@ -704,6 +707,10 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 		return TSCompletion.createNormal((TSObject)constructor);
 	}
 	
+	public TSCompletion visit(final This thisExpression)
+	{
+		return TSCompletion.createNormal(thisObject);
+	}
 	
 }
 

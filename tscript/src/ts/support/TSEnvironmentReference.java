@@ -88,7 +88,5 @@ final class TSEnvironmentReference extends TSReference
 		return null;
 	}
 
-
-
 }
 
