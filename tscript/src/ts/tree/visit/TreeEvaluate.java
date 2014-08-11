@@ -707,6 +707,9 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 		return TSCompletion.createNormal((TSObject)constructor);
 	}
 	
+	/** Visit the This expression
+	 * 
+	 */
 	public TSCompletion visit(final This thisExpression)
 	{
 		return TSCompletion.createNormal(thisObject);

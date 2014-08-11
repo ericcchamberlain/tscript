@@ -373,7 +373,12 @@ public final class TreeDump extends TreeVisitorBase<Object>
 		return null;
 	}
 	
-	
+	public Object visit(final This thisExpression)
+	{
+		indent();
+		writer.println("this");
+		return null;
+	}
 
 }
 

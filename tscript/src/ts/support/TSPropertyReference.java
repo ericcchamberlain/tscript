@@ -3,7 +3,7 @@ package ts.support;
 
 import ts.Message;
 
-/**
+/** A class to represent property references 
  * 
  */
 public class TSPropertyReference extends TSReference
@@ -74,6 +74,9 @@ public class TSPropertyReference extends TSReference
 	//https://piazza.com/class/hpc07xo86m62tn?cid=108
 	//implement the getValue and putValue methods in this class
 	
+	/** putValue()
+	 * sets the value 
+	 */
 	public void putValue(TSValue value)
 	{
 		//if the base is TSUndefined, then add the property to the global object
@@ -88,6 +91,9 @@ public class TSPropertyReference extends TSReference
 		}
 	}
 	
+	/** getValue()
+	 * gets the value of the reference 
+	 */
 	public TSValue getValue()
 	{
 		if (base.hasProperty(name)){
