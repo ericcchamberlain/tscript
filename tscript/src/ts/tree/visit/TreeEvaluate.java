@@ -26,6 +26,7 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 	// TODO: change to an environment for the global object
 	private TSLexicalEnvironment environment;
 	private TSObject thisObject; 
+	public Scanner scanner = new Scanner(System.in);
 			
 	public TreeEvaluate()
 	{
@@ -546,9 +547,9 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 		}
 		if ((refVal instanceof TSPropertyReference) && ( (TSPropertyReference) refVal).getReferencedName().equals(TSString.create("readln")))
 		{
-			Scanner scanner = new Scanner(System.in);
+			//scanner = new Scanner(System.in);
 			String systemInput = scanner.nextLine();
-			scanner.close();
+			//scanner.close();
 			if (systemInput.isEmpty())
 			{
 				systemInput = "";
