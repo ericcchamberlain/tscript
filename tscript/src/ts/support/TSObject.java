@@ -17,13 +17,13 @@ public class TSObject extends TSValue
 	 * initial value of the [[Extensible]] internal property is true.
 	 */
 	
-	protected TSObject()
+	public TSObject()
 	{
 		 this.setPrototype(TSNull.value);
 		 this.properties = new HashMap<TSString, TSValue>(); 
 	}
 	
-	protected TSObject(TSObject prototype)
+	public TSObject(TSObject prototype)
 	{
 		 this.setPrototype(prototype);
 		 this.properties = new HashMap<TSString, TSValue>(); 

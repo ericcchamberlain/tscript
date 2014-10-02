@@ -332,13 +332,11 @@ memberExpression
   | f=functionExpression
     { $lval = $f.lval; }
   | m=memberExpression DOT i=IDENTIFIER
-    { $lval = buildPropertyAccessor(loc($start), $m.lval, $i.text); }
+    { $lval = buildPropertyAccessor(loc($start), $m.lval, $i.text, false); }
   | NEW m=memberExpression a=arguments
     { $lval = buildNewExpression(loc($start), $m.lval, $a.lval);}
-
-  /*
-  MemberExpression [ Expression ]
-  */
+  | m=memberExpression  LBRACKET  e=expression RBRACKET
+    { $lval = buildPropertyAccessorBracket(loc($start), $m.lval, $e.lval, false); }
   ;
 
 newExpression
@@ -356,11 +354,9 @@ callExpression
   | c=callExpression a=arguments
     { $lval = buildCallExpression(loc($start), $m.lval, $a.lval); }
   | c=callExpression DOT i=IDENTIFIER
-    { $lval = buildPropertyAccessor(loc($start), $c.lval, $i.text); }
-  /*
-  CallExpression [ Expression ]
-  CallExpression . IdentifierName
-  */
+    { $lval = buildPropertyAccessor(loc($start), $c.lval, $i.text, true); }
+  | c=callExpression LBRACKET e=expression RBRACKET
+    { $lval = buildPropertyAccessorBracket(loc($start), $c.lval, $e.lval, true); }
  ;
 
 arguments
@@ -481,6 +477,8 @@ LPAREN : ('(');
 RPAREN : (')');
 LBRACE : ('{');
 RBRACE : ('}');
+LBRACKET : ('[');
+RBRACKET : (']');
 SEMICOLON : (';');
 ASSIGN : ('=');
 EQUALITY : ('=')('=');

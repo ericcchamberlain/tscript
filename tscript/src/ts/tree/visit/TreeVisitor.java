@@ -64,5 +64,7 @@ public interface TreeVisitor<T>
 
   T visit(This thisExpression);
 
+  T visit(PropertyAccessorBracket propertyAccessorBracket);
+
 }
 

@@ -168,5 +168,11 @@ public class TreeVisitorBase<T> implements TreeVisitor<T>
 		return null;
 	}
 
+	@Override
+	public T visit(PropertyAccessorBracket propertyAccessorBracket) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
 

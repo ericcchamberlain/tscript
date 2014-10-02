@@ -560,6 +560,20 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 			}
 			return TSCompletion.createNormal(TSString.create(systemInput));
 		} 
+		if ((refVal instanceof TSPropertyReference) && ( (TSPropertyReference) refVal).getReferencedName().equals(TSString.create("split")))
+		{ 	// not up to spec, having issues with property accessors that are numeric, e.g. value.one works, value.1 would not 
+			String deliminator = argValues.get(1).toStr().getInternal();
+			String input = argValues.get(0).toStr().getInternal(); 
+			String[] result = input.split(deliminator);
+			TSObject returnResult = new TSObject(); 
+			// add a property with the size / count of elements in the object
+			returnResult.addProperty(TSString.create("count"), TSNumber.create(result.length));
+			for (int i = 0; i < result.length; i++) {
+				String string = result[i];
+				returnResult.addProperty(TSString.create(Integer.toString(i) ), TSString.create(string));
+			}
+			return TSCompletion.createNormal(returnResult);
+		} 
 		
 		//check if an object and isCallable
 		TSValue exprValue = refVal.getValue();
@@ -664,6 +678,41 @@ public final class TreeEvaluate extends TreeVisitorBase<TSCompletion>
 		
 		//Return a value of type Reference whose base value is baseValue and whose referenced name is propertyNameString, and whose strict mode flag is strict.
 		 TSReference returnValue = new TSPropertyReference((TSObject)baseValue, TSString.create(propertyAccessor.getIdentifierName())); 
+		 return TSCompletion.createNormal(returnValue);
+	}
+	
+	/** Visit the PropertyAccessor ASTs and evaluate 
+	 *  @param propertyAccessorBracket  the property accessor node to evaluate
+	 *  
+	 *  ECMA 11.2.1
+	 *  http://www.ecma-international.org/ecma-262/5.1/#sec-11.2.1
+	 *  
+	 */
+	public TSCompletion visit(final PropertyAccessorBracket propertyAccessorBracket)
+	{
+		//Let baseReference be the result of evaluating MemberExpression.
+		TSCompletion baseReference =  visitNode(propertyAccessorBracket.getExpression());
+		//Let baseValue be GetValue(baseReference).
+		TSValue baseValue = baseReference.getValue().getValue();
+		
+		/* ONLY NEEDED FOR MemberExpression [ Expression ] notation */
+		//Let propertyNameReference be the result of evaluating Expression.
+		TSCompletion propertyNameReference = visitNode(propertyAccessorBracket.getInnerExpression());
+		//Let propertyNameValue be GetValue(propertyNameReference).
+		TSValue propertyNameValue = propertyNameReference.getValue(); 
+		
+		//Call CheckObjectCoercible(baseValue).
+		if (!checkObjectCoercible(baseValue)) {
+			// throw a type error message string
+			return TSCompletion.create(TSCompletionType.Throw, TSString.create("TypeError"), null);
+		}
+		
+		//Let propertyNameString be ToString(propertyNameValue).
+		//If the syntactic production that is being evaluated is contained in strict mode code, let strict be true, else let strict be false.
+		TSString propertyNameString = propertyNameValue.toStr(); 
+		
+		//Return a value of type Reference whose base value is baseValue and whose referenced name is propertyNameString, and whose strict mode flag is strict.
+		 TSReference returnValue = new TSPropertyReference((TSObject)baseValue, propertyNameString); 
 		 return TSCompletion.createNormal(returnValue);
 	}
 	

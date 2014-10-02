@@ -8,18 +8,18 @@ import ts.tree.visit.TreeVisitor;
  * AST property accessor expression node
  *
  */
-public final class PropertyAccessor extends Expression
+public final class PropertyAccessorBracket extends Expression
 {
 
   private Expression expression;
-  private String identifier;
+  private Expression innerExpresion;
   private boolean call;
 
-  public PropertyAccessor(final Location loc, final Expression exp, final String i, final boolean call)
+  public PropertyAccessorBracket(final Location loc, final Expression exp, final Expression innerExpression, final boolean call)
   {
     super(loc);
     this.expression = exp;
-    this.identifier = i;
+    this.innerExpresion = innerExpression;
     this.call = call; 
   }
 
@@ -29,10 +29,10 @@ public final class PropertyAccessor extends Expression
     return expression;
   }
 
-  /** Returns the identifier name */
-  public String getIdentifierName()
+  /** Returns the innerExpression */
+  public Expression getInnerExpression()
   {
-    return identifier; 
+    return innerExpresion; 
   }
 
   /** Visit the AST node */

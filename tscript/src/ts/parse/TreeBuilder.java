@@ -377,7 +377,7 @@ public class TreeBuilder
 	// helper function to detect "reference expected" errors
 	private static boolean producesReference(Node node)
 	{
-		if (node instanceof Identifier || node instanceof PropertyAccessor)
+		if (node instanceof Identifier || node instanceof PropertyAccessor || node instanceof PropertyAccessorBracket)
 		{
 			return true;
 		}
@@ -404,10 +404,22 @@ public class TreeBuilder
 	 *  @param  exp  expression subtree.
 	 *  @param  i 	 the identifier  
 	 */
-	public static Expression buildPropertyAccessor(Location loc, final Expression exp, final String i)
+	public static Expression buildPropertyAccessor(Location loc, final Expression exp, final String i, boolean call)
 	{
 		Message.log("TreeBuilder: PropertyAccessor");
-		return new PropertyAccessor(loc, exp, i);
+		return new PropertyAccessor(loc, exp, i, call);
+	}
+	
+	/** Build a property accessor expression. 
+	 *
+	 *  @param  loc  location in source code (file, line, column)
+	 *  @param  exp  expression subtree.
+	 *  @param  in 	 expression in brackets  
+	 */
+	public static Expression buildPropertyAccessorBracket(Location loc, final Expression exp, final Expression in, boolean call)
+	{
+		Message.log("TreeBuilder: PropertyAccessor");
+		return new PropertyAccessorBracket(loc, exp, in, call);
 	}
 	
 	/** Build this expression. 
