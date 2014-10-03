@@ -89,7 +89,7 @@ public final class TSString extends TSPrimitive
 		}
 		else if (right instanceof TSString)
 		{
-			if(this.getInternal() == right.toStr().getInternal())
+			if(this.getInternal().equals(right.toStr().getInternal()))
 			{
 				return TSBoolean.create(true);
 			}
