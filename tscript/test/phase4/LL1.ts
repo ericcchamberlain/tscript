@@ -104,6 +104,25 @@ isDuplicateTerminal = function fDupTerm(needle) {
 	return flag;
 };
 
+var isNullDerivingSymbol;
+isNullDerivingSymbol = function (hay, needle) {
+	var flagNull;
+	flagNull = false;
+	var i;
+	i = 0;
+	//print("isNullDerivingSymbol: " + needle);
+	while (i < hay.count) {
+		//print(hay[i] + " == " + needle + " is " + (hay[i] == needle));
+		if (hay[i] == needle) {
+			flagNull == true;
+			return true;
+		};
+		i = i + 1;
+	};
+	return flagNull;
+};
+
+
 // ************* Program Execution *************
 
 printHeader();
@@ -234,93 +253,107 @@ var firstSets;
 firstSets = new 42();
 firstSets.count = nonTerminals.count; 
 
-var isNullDerivingSymbol;
-isNullDerivingSymbol = function (symbol) {
-	var flag;
-	flag = false;
-	var i;
-	i = 0;
-	//print("isNullDerivingSymbol: " + symbol);
-	while (i < nullDerivingNonTerminals.count) {
-		//print(nullDerivingNonTerminals[i] + " == " + symbol + " is " + nullDerivingNonTerminals[i] == symbol);
-		if (nullDerivingNonTerminals[i] == symbol) {
-			flag == true;
-		};
-		i = i + 1;
-	};
-	return flag;
-};
-
-
 var firstFollow;
 firstFollow = function ffirstFollow(origin, productionNumber, symbolNumber) {
 	
+	print("    Step 3: Computer the first of the specified symbol"); 
+	print("    origin: " + origin + " productionNumber: " + productionNumber + " symbolNumber: " + symbolNumber ); 
+	print("    symbol: " + productions[productionNumber][symbolNumber]);
+
 	// if the symbol is a terminal, add the symbol to the origin first set
 	// else if the current symbol is null deriving, then call firstFollow on the next symbol
-
 	// if non-terminal 
 	var isNT;
 	isNT = isNonTerminal(nonTerminals, productions[productionNumber][symbolNumber]);
 	if ( isNT == true ) {
 		//print( origin + ", " + productionNumber + ", " + symbolNumber + ": " + productions[productionNumber][symbolNumber] + " is a non-terminal" );
+		print("    non-terminal: " + isNT);
 		// if null-deriving 
 		var isND; 
-		isND = isNullDerivingSymbol(productions[productionNumber][symbolNumber]);
+		isND = isNullDerivingSymbol(nullDerivingNonTerminals, productions[productionNumber][symbolNumber]);
+		print("    null-deriving: " + isND);
 		if ( isND == true ) {
 			//print( productions[productionNumber][symbolNumber] + " is null-deriving");
-			if (symbolNumber + 1 < productions[productionNumber].count ) {
+			//if (symbolNumber + 1 < productions[productionNumber].count ) {
 				//print("follow null deriving symbol");
+				print("    *Following " + productions[productionNumber][symbolNumber] + " to firstFollow(" + origin + ", " + productionNumber + ", " + (symbolNumber + 1) + ") ...\n");
 				firstFollow(origin, productionNumber, symbolNumber + 1);
+			//};
+		}
+
+		print("    null-deriving: " + isND);
+		//print(productions[productionNumber][symbolNumber] + " is not null-deriving");
+		// iterate through productions, call firstFollow on symbol match 
+		var va;
+		va = 0;
+		while (va < productions.count) {
+			if(productions[va][0] == productions[productionNumber][symbolNumber]) {
+				print("    *Following " + productions[productionNumber][symbolNumber] + " to firstFollow(" + origin + ", " + va + ", " + 1 + ") ...\n");
+				firstFollow(origin, va, 1);
 			};
-		} else {
-			//print(productions[productionNumber][symbolNumber] + " is not null-deriving");
-			// iterate through productions, call firstFollow on symbol match 
-			var va;
-			va = 0;
-			while (va < productions.count) {
-				if(productions[va][0] == productions[productionNumber][symbolNumber]) {
-					//print("follow symbol");
-					firstFollow(origin, va, 1);
-				};
-				va = va + 1;
-			};
+			va = va + 1;
 		};
-	}
+	};
 
 	var isT;
 	isT = isTerminal(productions, productions[productionNumber][symbolNumber]); 
 	if ( isT == true ) {
+		print("    non-terminal: " + isNT);
+		print("    null-deriving: false");
 		//print(productions[productionNumber][symbolNumber] + " is a terminal");
-		firstSets[origin][firstSets[origin].count] = productions[productionNumber][symbolNumber]; 
-		firstSets[origin].count = firstSets[origin].count + 1; 
+		print("    +Adding " + productions[productionNumber][symbolNumber] + " to " + "firstSets[" + origin + "][" + firstSets[origin].count + "] ");
+		var c;
+		var d;
+		c = origin;
+		d = firstSets[origin].count;
+		var q;
+		q = 0;
+		var gh;
+		gh = false;
+		while (q < firstSets[origin].count){
+			if(firstSets[origin][q] == productions[productionNumber][symbolNumber]){
+				gh = true; 
+			};
+			q = q + 1;
+		};
+		if( gh == false ) {
+			firstSets[c][d] = productions[productionNumber][symbolNumber]; 
+			firstSets[c].count = firstSets[c].count + 1; 
+		}; 
 	};
+
+	print("\n");
 
  
 };
-
 
 var calculateFirstSet;
 calculateFirstSet = function (origin, nonTerminalSymbol ) {
 	// for each production, look for the nonTerminalSymbol 
 	// call first on each match
+	print("  Step 2: Compute the first set where the non-terminal symbol matches a production");
 	var i;
 	i = 0;
 	while (i < productions.count) {
 		if(nonTerminalSymbol == productions[i][0]) {
-			//print("call firstFollow() with parameters " + origin + ", " + i + ", 1");
-			firstFollow(origin, i, 1);
+			if(productions[i].count > 1) { 
+				print("  origin: " + origin + " nonTerminalSymbol: " + nonTerminalSymbol); 
+				print("  Matching Production: " + productionRows[i]);
+				print("  " + productions[i][0] + " -> " + "firstFollow() with parameters " + origin + ", " + i + ", " + 1 + "\n");
+				firstFollow(origin, i, 1);
+			};
 		};
 		i = i + 1;
 	};
 };
 
-
 // compute the first set for each non-terminal 
+print("Step 1: Computer the set for each non-terminal symbol \n");
 i = 0;
 while (i < nonTerminals.count) { 
 	firstSets[i].count = 0;
 	firstSets[i] = nonTerminals[i];
-	//print ("call calculateFirstSet() with parameters " + i + " and " + nonTerminals[i]);
+	print ("NTS: " + nonTerminals[i] + " -> calculateFirstSet() with parameters " + i + " and " + nonTerminals[i] + "\n");
 	calculateFirstSet(i, nonTerminals[i]);
 	i = i + 1;
 };
@@ -329,8 +362,8 @@ while (i < nonTerminals.count) {
 var firstSetsString;
 firstSetsString = "";
 i = 0;
-j = 0; 
 while (i < firstSets.count) {
+	j = 0; 
 	firstSetsString = firstSetsString + firstSets[i] + " : ";
 	while (j < firstSets[i].count) {
 		firstSetsString = firstSetsString + firstSets[i][j] + " ";
@@ -342,5 +375,14 @@ while (i < firstSets.count) {
 firstSetsString = firstSetsString + "\n";
 print ("\nFirst Sets: \n" + firstSetsString);
 
-
 // determine follow sets
+
+print ("Follow Set: ");
+
+
+
+
+
+
+
+
